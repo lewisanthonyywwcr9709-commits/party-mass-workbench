@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>党群宣传部智能工作台</title>
+  <style>
+    :root {
+      --red-950: #3f0b09;
+      --red-900: #67130f;
+      --red-800: #8f1d17;
+      --red-700: #b42318;
+      --red-500: #df3f32;
+      --gold-500: #d6a34b;
+      --gold-300: #f4d58a;
+      --ink: #211a18;
+      --muted: #7c706a;
+      --line: rgba(116, 47, 35, .14);
+      --glass: rgba(255, 255, 255, .72);
+      --glass-strong: rgba(255, 255, 255, .88);
+      --bg: #f7eee8;
+      --green: #1f7a4d;
+      --blue: #205b8d;
+      --shadow: 0 24px 70px rgba(89, 19, 15, .15);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(214, 163, 75, .18), transparent 30%),
+        radial-gradient(circle at 76% 0%, rgba(180, 35, 24, .18), transparent 28%),
+        linear-gradient(135deg, #fff8f3 0%, #f5ebe4 44%, #eee0d6 100%);
+      overflow-x: hidden;
+    }
+
+    button, select, input {
+      font: inherit;
+    }
+
+    button, select {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      color: var(--ink);
+      padding: 11px 14px;
+      backdrop-filter: blur(18px);
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(116, 47, 35, .16);
+    }
+
+    .primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--red-700), var(--red-900));
+      color: white;
+    }
+
+    .intro {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: #240503;
+      overflow: hidden;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+
+    .intro.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-video {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(115deg, rgba(63, 11, 9, .96), rgba(145, 29, 21, .82) 42%, rgba(39, 8, 6, .94)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23f4d58a' stop-opacity='.34'/%3E%3Cstop offset='1' stop-color='%23ffffff' stop-opacity='.04'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 650 C220 570 360 770 560 610 C780 432 950 530 1400 300 L1400 900 L0 900 Z' fill='url(%23g)'/%3E%3Cpath d='M120 140 L470 140 L520 190 L830 190' fill='none' stroke='%23f4d58a' stroke-opacity='.22' stroke-width='2'/%3E%3Cpath d='M900 90 L1120 90 L1180 150 L1340 150' fill='none' stroke='%23fff' stroke-opacity='.14' stroke-width='2'/%3E%3Ccircle cx='1030' cy='360' r='210' fill='none' stroke='%23f4d58a' stroke-opacity='.13' stroke-width='2'/%3E%3Ccircle cx='1030' cy='360' r='132' fill='none' stroke='%23fff' stroke-opacity='.1' stroke-width='2'/%3E%3C/svg%3E");
+      background-size: cover;
+      transform: scale(1.05);
+      animation: cinematicMove 7s ease-in-out infinite alternate;
+    }
+
+    .intro-video::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background:
+        linear-gradient(100deg, transparent 0 34%, rgba(255,255,255,.14) 39%, transparent 45% 100%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 1px, transparent 1px 90px);
+      animation: scan 4.8s ease-in-out infinite;
+    }
+
+    .intro-video::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% 0;
+      height: 44%;
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.4), transparent),
+        repeating-linear-gradient(110deg, rgba(244,213,138,.28) 0 2px, transparent 2px 18px);
+      clip-path: polygon(0 54%, 18% 30%, 33% 48%, 52% 18%, 71% 36%, 100% 8%, 100% 100%, 0 100%);
+      opacity: .62;
+    }
+
+    .intro-content {
+      position: relative;
+      width: min(980px, calc(100vw - 44px));
+      padding: 48px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 24px;
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 40px 120px rgba(0,0,0,.36);
+      backdrop-filter: blur(20px);
+    }
+
+    .intro-kicker {
+      color: var(--gold-300);
+      font-weight: 800;
+      letter-spacing: 8px;
+      font-size: 13px;
+    }
+
+    .intro h1 {
+      margin: 18px 0 16px;
+      font-size: clamp(40px, 7vw, 86px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .intro p {
+      width: min(660px, 100%);
+      margin: 0;
+      color: rgba(255,255,255,.82);
+      line-height: 1.9;
+      font-size: 16px;
+    }
+
+    .intro-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 34px;
+      flex-wrap: wrap;
+    }
+
+    .intro-actions button {
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.28);
+      color: #fff;
+      min-width: 132px;
+    }
+
+    .intro-actions .enter {
+      background: #fff;
+      color: var(--red-900);
+    }
+
+    .shell {
+      min-height: 100vh;
+      padding: 22px;
+    }
+
+    .top-dock {
+      position: sticky;
+      top: 16px;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      width: min(1440px, calc(100vw - 44px));
+      margin: 0 auto 24px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: 999px;
+      background: rgba(255,255,255,.68);
+      box-shadow: 0 18px 60px rgba(94, 28, 18, .12);
+      backdrop-filter: blur(28px) saturate(1.2);
+    }
+
+    .identity {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--red-700), var(--red-950));
+      color: #fff;
+      font-weight: 900;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.24), 0 12px 24px rgba(116, 35, 24, .26);
+    }
+
+    .identity strong {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .identity span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .dock-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 5px;
+      border-radius: 999px;
+      background: rgba(130, 55, 43, .08);
+    }
+
+    .dock-tab {
+      border: 0;
+      padding: 10px 16px;
+      color: var(--muted);
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .dock-tab.active {
+      color: white;
+      background: linear-gradient(135deg, var(--red-700), var(--red-900));
+      box-shadow: 0 10px 24px rgba(116, 35, 24, .22);
+    }
+
+    .dock-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 0;
+    }
+
+    .hero {
+      position: relative;
+      width: min(1440px, calc(100vw - 44px));
+      min-height: 460px;
+      margin: 0 auto 22px;
+      padding: 34px;
+      border: 1px solid rgba(255,255,255,.66);
+      border-radius: 28px;
+      overflow: hidden;
+      color: white;
+      background:
+        linear-gradient(115deg, rgba(82, 13, 10, .96), rgba(173, 37, 27, .82) 54%, rgba(50, 8, 6, .94)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='720' viewBox='0 0 1600 720'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23ffffff' stop-opacity='.22'/%3E%3Cstop offset='1' stop-color='%23f4d58a' stop-opacity='.05'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M70 560 C230 400 370 620 530 470 C710 302 830 410 1000 260 C1190 92 1340 170 1560 70' fill='none' stroke='url(%23a)' stroke-width='90' stroke-linecap='round'/%3E%3Cpath d='M850 520 L1210 210 L1510 455' fill='none' stroke='%23f4d58a' stroke-opacity='.28' stroke-width='4'/%3E%3Cpath d='M1020 500 L1210 315 L1410 500' fill='none' stroke='%23fff' stroke-opacity='.14' stroke-width='3'/%3E%3Ccircle cx='1260' cy='260' r='180' fill='none' stroke='%23fff' stroke-opacity='.09' stroke-width='2'/%3E%3C/svg%3E");
+      background-size: cover;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.09) 0 1px, transparent 1px 100px),
+        linear-gradient(0deg, rgba(255,255,255,.07) 0 1px, transparent 1px 100px);
+      mask-image: linear-gradient(90deg, #000, transparent 72%);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      right: -120px;
+      top: -80px;
+      border-radius: 50%;
+      border: 1px solid rgba(244,213,138,.28);
+      box-shadow: inset 0 0 0 80px rgba(244,213,138,.04), inset 0 0 0 160px rgba(255,255,255,.03);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 420px;
+      gap: 32px;
+      height: 100%;
+      align-items: end;
+    }
+
+    .hero-copy {
+      align-self: center;
+      max-width: 780px;
+    }
+
+    .eyebrow {
+      color: var(--gold-300);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 6px;
+    }
+
+    .hero h2 {
+      margin: 18px 0 18px;
+      font-size: clamp(44px, 6vw, 78px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 650px;
+      color: rgba(255,255,255,.82);
+      font-size: 17px;
+      line-height: 1.9;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-self: end;
+    }
+
+    .hero-card {
+      min-height: 126px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255,255,255,.11);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-card span {
+      display: block;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+    }
+
+    .hero-card strong {
+      display: block;
+      margin-top: 12px;
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .hero-card small {
+      display: block;
+      margin-top: 10px;
+      color: var(--gold-300);
+    }
+
+    .content {
+      width: min(1440px, calc(100vw - 44px));
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: var(--radius);
+      background: var(--glass);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(28px) saturate(1.18);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.36);
+    }
+
+    .panel-head h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .panel-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: var(--red-800);
+      background: rgba(180,35,24,.1);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) 420px;
+      gap: 18px;
+    }
+
+    .tasks {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .task {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid rgba(116,47,35,.11);
+      border-radius: 16px;
+      background: rgba(255,255,255,.72);
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+    }
+
+    .task:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px rgba(116,47,35,.13);
+      background: rgba(255,255,255,.92);
+    }
+
+    .task h4 {
+      margin: 0 0 10px;
+      font-size: 17px;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      border-radius: 999px;
+      padding: 0 9px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+    }
+
+    .tag.party { color: var(--red-800); }
+    .tag.media { color: var(--blue); }
+
+    .progress-box {
+      display: grid;
+      align-content: center;
+      gap: 9px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--red-700);
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .people {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .person {
+      display: grid;
+      grid-template-columns: 46px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 13px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(116,47,35,.1);
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--red-700), var(--gold-500));
+    }
+
+    .person strong { display: block; }
+    .person span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      height: 30px;
+      border-radius: 999px;
+      padding: 0 10px;
+      background: rgba(31,122,77,.1);
+      color: var(--green);
+      font-weight: 800;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .module-body {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .module-card {
+      padding: 16px;
+      min-height: 124px;
+      border: 1px solid rgba(116,47,35,.1);
+      border-radius: 16px;
+      background: rgba(255,255,255,.72);
+    }
+
+    .module-card strong {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 16px;
+    }
+
+    .module-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .review {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .review:last-child { border-bottom: 0; }
+    .review b { display: block; margin-bottom: 5px; }
+    .review span { color: var(--muted); font-size: 12px; }
+
+    .tab-page {
+      display: none;
+      animation: rise .42s ease both;
+    }
+
+    .tab-page.active {
+      display: block;
+    }
+
+    @keyframes cinematicMove {
+      from { transform: scale(1.05) translate3d(-1%, -1%, 0); }
+      to { transform: scale(1.13) translate3d(1%, 1%, 0); }
+    }
+
+    @keyframes scan {
+      from { transform: translateX(-28%); opacity: .42; }
+      50% { opacity: .74; }
+      to { transform: translateX(28%); opacity: .42; }
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px) scale(.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 1180px) {
+      .top-dock, .hero, .content { width: calc(100vw - 28px); }
+      .top-dock { grid-template-columns: 1fr; border-radius: 24px; }
+      .dock-tabs, .dock-actions { justify-content: flex-start; flex-wrap: wrap; }
+      .hero-inner, .main-grid, .module-grid { grid-template-columns: 1fr; }
+      .hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .shell { padding: 14px; }
+      .hero { padding: 24px; min-height: 560px; }
+      .hero-metrics { grid-template-columns: 1fr; }
+      .task { grid-template-columns: 1fr; }
+      .person { grid-template-columns: 46px 1fr; }
+      .person .status { grid-column: 2; justify-self: start; }
+      .intro-content { padding: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="intro" id="intro">
+    <div class="intro-video" aria-hidden="true"></div>
+    <div class="intro-content">
+      <div class="intro-kicker">STATE-OWNED ENTERPRISE PARTY-MASS OFFICE</div>
+      <h1>党建引领<br />宣传赋能</h1>
+      <p>以高质量党建引领高质量发展，以现代传播体系凝聚奋进力量。这里是党群宣传部每日协同、任务推进、内容审核与品牌策划的内部工作中枢。</p>
+      <div class="intro-actions">
+        <button class="enter" id="enterBtn">进入工作台</button>
+        <button id="replayBtn">观看开场</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell">
+    <header class="top-dock">
+      <div class="identity">
+        <div class="mark">党</div>
+        <div>
+          <strong>党群宣传部智能工作台</strong>
+          <span id="todayText">内部协同系统</span>
+        </div>
+      </div>
+      <nav class="dock-tabs" aria-label="工作台导航">
+        <button class="dock-tab active" data-tab="overview">总览</button>
+        <button class="dock-tab" data-tab="party">党建</button>
+        <button class="dock-tab" data-tab="media">宣传</button>
+        <button class="dock-tab" data-tab="review">审稿</button>
+      </nav>
+      <div class="dock-actions">
+        <select id="moduleFilter" aria-label="筛选模块">
+          <option value="all">全部模块</option>
+          <option value="党建">党建</option>
+          <option value="宣传">宣传</option>
+        </select>
+        <select id="ownerFilter" aria-label="筛选责任人">
+          <option value="all">全部人员</option>
+        </select>
+        <button id="showIntroBtn">开场</button>
+        <button class="primary" id="addBtn">新增任务</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <div class="eyebrow">党建统筹 · 宣传协同 · 日清日结</div>
+          <h2>让每一项工作<br />都看得见进度</h2>
+          <p>围绕党建和宣传两条主线，沉淀每日安排、责任分工、审稿状态、专题策划和传播任务，形成适合部门内部使用的高端协同门户。</p>
+        </div>
+        <div class="hero-metrics">
+          <div class="hero-card"><span>今日任务</span><strong id="metricTotal">0</strong><small>晨会后实时更新</small></div>
+          <div class="hero-card"><span>平均进度</span><strong id="metricProgress">0%</strong><small>按任务进度计算</small></div>
+          <div class="hero-card"><span>待审稿件</span><strong id="metricReview">0</strong><small>三审三校闭环</small></div>
+          <div class="hero-card"><span>重点事项</span><strong id="metricImportant">0</strong><small>领导关注事项</small></div>
+        </div>
+      </div>
+    </section>
+
+    <main class="content">
+      <div class="tab-page active" id="tab-overview">
+        <div class="main-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>每日工作安排</h3>
+                <p>像任务中控台一样推进每位员工当天事项</p>
+              </div>
+              <span class="pill" id="taskCount">0 项</span>
+            </div>
+            <div class="tasks" id="taskList"></div>
+          </section>
+
+          <div class="side-stack">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h3>人员状态</h3>
+                  <p>责任分工、任务负荷、完成进度</p>
+                </div>
+                <span class="pill">日清</span>
+              </div>
+              <div class="people" id="peopleList"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h3>今日提示</h3>
+                  <p>部门内部事项提醒</p>
+                </div>
+                <span class="pill">提醒</span>
+              </div>
+              <div class="module-body">
+                <div class="module-card"><strong>晨会关注</strong><p>先确认领导关注事项，再确认公众号、视频号和重要材料的出稿节奏。</p></div>
+                <div class="module-card"><strong>收口原则</strong><p>涉及政治表述、单位名称、数据口径和图片使用的内容必须完成复核。</p></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-page" id="tab-party">
+        <div class="module-grid">
+          <section class="panel">
+            <div class="panel-head"><div><h3>党建模块</h3><p>党务、统战、团青、意识形态、理论学习</p></div><span class="pill">主责主业</span></div>
+            <div class="module-body">
+              <div class="module-card"><strong>党务基础</strong><p>党委会、支部组织生活、主题党日、换届、发展党员、党费和台账归档。</p></div>
+              <div class="module-card"><strong>统战群团</strong><p>统战对象联系、团青工作、工会宣传、志愿服务、节日慰问和活动策划。</p></div>
+              <div class="module-card"><strong>理论武装</strong><p>第一议题、中心组学习、专题研讨、学习资料、心得成果和宣讲安排。</p></div>
+              <div class="module-card"><strong>意识形态</strong><p>阵地管理、舆情风险提示、内容审核、季度分析和责任制落实。</p></div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h3>党建今日事项</h3><p>仅展示党建模块任务</p></div><span class="pill">党建</span></div>
+            <div class="tasks" id="partyTasks"></div>
+          </section>
+        </div>
+      </div>
+
+      <div class="tab-page" id="tab-media">
+        <div class="module-grid">
+          <section class="panel">
+            <div class="panel-head"><div><h3>宣传模块</h3><p>公众号、视频号、新闻稿、专题策划、品牌素材</p></div><span class="pill">传播矩阵</span></div>
+            <div class="module-body">
+              <div class="module-card"><strong>公众号</strong><p>选题策划、标题优化、图文编辑、图片规范、发布排期和数据复盘。</p></div>
+              <div class="module-card"><strong>视频号</strong><p>脚本、分镜、素材筛选、字幕包装、封面标题和发布节奏。</p></div>
+              <div class="module-card"><strong>新闻宣传</strong><p>基层投稿、项目动态、重要活动、先进典型和媒体通稿。</p></div>
+              <div class="module-card"><strong>品牌专题</strong><p>党建品牌、项目攻坚、一线人物、企业文化和主题宣传月。</p></div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h3>宣传今日事项</h3><p>仅展示宣传模块任务</p></div><span class="pill">宣传</span></div>
+            <div class="tasks" id="mediaTasks"></div>
+          </section>
+        </div>
+      </div>
+
+      <div class="tab-page" id="tab-review">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>审稿流转与三审三校</h3>
+              <p>适合后续扩展成真实流转：起草、初审、复审、终审、发布</p>
+            </div>
+            <span class="pill">质量把关</span>
+          </div>
+          <div class="module-body">
+            <div class="review"><div><b>公众号推文：项目攻坚专题</b><span>二审中 · 需核对单位名称和项目数据</span></div><span class="status">待复核</span></div>
+            <div class="review"><div><b>视频号脚本：一线建设者人物短片</b><span>素材整理 · 待补采访金句</span></div><span class="status">推进中</span></div>
+            <div class="review"><div><b>新闻稿件：基层单位投稿</b><span>政治表述校核 · 标题需降虚火</span></div><span class="status">待修改</span></div>
+            <div class="review"><div><b>意识形态周报</b><span>终审前 · 风险提示需补来源</span></div><span class="status">收口中</span></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const defaultTasks = [
+      { title: "党委会材料收口与会前清单核对", module: "党建", owner: "陈主任", deadline: "10:30", priority: "重点", progress: 72 },
+      { title: "统战工作半年台账更新", module: "党建", owner: "林专员", deadline: "11:40", priority: "常规", progress: 45 },
+      { title: "公众号项目攻坚专题推文二审", module: "宣传", owner: "黄编辑", deadline: "15:00", priority: "重点", progress: 60 },
+      { title: "视频号素材筛选与脚本初稿", module: "宣传", owner: "吴策划", deadline: "17:30", priority: "重点", progress: 35 },
+      { title: "意识形态风险提示周报", module: "党建", owner: "陈主任", deadline: "16:20", priority: "重点", progress: 50 },
+      { title: "基层投稿标题优化与图片规范", module: "宣传", owner: "黄编辑", deadline: "18:00", priority: "常规", progress: 82 },
+      { title: "七一专题素材库归档", module: "宣传", owner: "吴策划", deadline: "18:20", priority: "常规", progress: 28 },
+      { title: "支部主题党日活动方案复核", module: "党建", owner: "林专员", deadline: "16:50", priority: "重点", progress: 66 }
+    ];
+
+    const people = [
+      { name: "陈主任", role: "统筹党建材料、重要审核" },
+      { name: "林专员", role: "党务台账、统战群团" },
+      { name: "黄编辑", role: "公众号、新闻稿、审稿" },
+      { name: "吴策划", role: "视频号、专题策划、素材" }
+    ];
+
+    const storageKey = "partyMassWorkbenchTasks-v2";
+    let tasks = JSON.parse(localStorage.getItem(storageKey) || "null") || defaultTasks;
+
+    const intro = document.getElementById("intro");
+    const taskList = document.getElementById("taskList");
+    const peopleList = document.getElementById("peopleList");
+    const moduleFilter = document.getElementById("moduleFilter");
+    const ownerFilter = document.getElementById("ownerFilter");
+
+    document.getElementById("todayText").textContent = new Intl.DateTimeFormat("zh-CN", { dateStyle: "full" }).format(new Date());
+
+    function save() {
+      localStorage.setItem(storageKey, JSON.stringify(tasks));
+    }
+
+    function statusText(value) {
+      if (value >= 100) return "已完成";
+      if (value >= 70) return "收口中";
+      if (value >= 35) return "推进中";
+      return "待启动";
+    }
+
+    function renderFilters() {
+      const current = ownerFilter.value;
+      const owners = [...new Set(tasks.map(task => task.owner))];
+      ownerFilter.innerHTML = '<option value="all">全部人员</option>' + owners.map(owner => `<option value="${owner}">${owner}</option>`).join("");
+      if (owners.includes(current)) ownerFilter.value = current;
+    }
+
+    function filteredTasks() {
+      return tasks.filter(task => {
+        const moduleOk = moduleFilter.value === "all" || task.module === moduleFilter.value;
+        const ownerOk = ownerFilter.value === "all" || task.owner === ownerFilter.value;
+        return moduleOk && ownerOk;
+      });
+    }
+
+    function renderMetrics(list) {
+      const avg = list.length ? Math.round(list.reduce((sum, task) => sum + Number(task.progress), 0) / list.length) : 0;
+      document.getElementById("metricTotal").textContent = list.length;
+      document.getElementById("metricProgress").textContent = avg + "%";
+      document.getElementById("metricReview").textContent = tasks.filter(task => task.title.includes("审")).length;
+      document.getElementById("metricImportant").textContent = tasks.filter(task => task.priority === "重点").length;
+      document.getElementById("taskCount").textContent = list.length + " 项";
+    }
+
+    function taskMarkup(task) {
+      const index = tasks.indexOf(task);
+      return `
+        <article class="task">
+          <div>
+            <h4>${task.title}</h4>
+            <div class="task-meta">
+              <span class="tag ${task.module === "党建" ? "party" : "media"}">${task.module}</span>
+              <span class="tag">${task.owner}</span>
+              <span class="tag">截止 ${task.deadline}</span>
+              <span class="tag">${task.priority}</span>
+            </div>
+          </div>
+          <div class="progress-box">
+            <div class="progress-top"><span>${statusText(task.progress)}</span><b>${task.progress}%</b></div>
+            <input type="range" min="0" max="100" value="${task.progress}" data-index="${index}" aria-label="${task.title}进度" />
+          </div>
+        </article>
+      `;
+    }
+
+    function bindRanges(container) {
+      container.querySelectorAll("input[type='range']").forEach(input => {
+        input.addEventListener("input", event => {
+          tasks[event.target.dataset.index].progress = Number(event.target.value);
+          save();
+          render();
+        });
+      });
+    }
+
+    function renderTasks() {
+      const list = filteredTasks();
+      renderMetrics(list);
+      taskList.innerHTML = list.map(taskMarkup).join("");
+      bindRanges(taskList);
+
+      const party = document.getElementById("partyTasks");
+      const media = document.getElementById("mediaTasks");
+      party.innerHTML = tasks.filter(task => task.module === "党建").map(taskMarkup).join("");
+      media.innerHTML = tasks.filter(task => task.module === "宣传").map(taskMarkup).join("");
+      bindRanges(party);
+      bindRanges(media);
+    }
+
+    function renderPeople() {
+      peopleList.innerHTML = people.map(person => {
+        const owned = tasks.filter(task => task.owner === person.name);
+        const avg = owned.length ? Math.round(owned.reduce((sum, task) => sum + Number(task.progress), 0) / owned.length) : 0;
+        return `
+          <div class="person">
+            <div class="avatar">${person.name.slice(0, 1)}</div>
+            <div><strong>${person.name}</strong><span>${person.role} · ${owned.length} 项任务</span></div>
+            <div class="status">${avg}%</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function render() {
+      renderFilters();
+      renderTasks();
+      renderPeople();
+    }
+
+    document.getElementById("enterBtn").addEventListener("click", () => intro.classList.add("hidden"));
+    document.getElementById("replayBtn").addEventListener("click", () => {
+      intro.classList.remove("hidden");
+      window.setTimeout(() => intro.classList.add("hidden"), 5200);
+    });
+    document.getElementById("showIntroBtn").addEventListener("click", () => intro.classList.remove("hidden"));
+
+    document.getElementById("addBtn").addEventListener("click", () => {
+      const title = prompt("输入新任务名称");
+      if (!title) return;
+      const module = moduleFilter.value === "宣传" ? "宣传" : "党建";
+      tasks.unshift({ title, module, owner: module === "宣传" ? "黄编辑" : "陈主任", deadline: "18:00", priority: "常规", progress: 0 });
+      save();
+      render();
+    });
+
+    moduleFilter.addEventListener("change", renderTasks);
+    ownerFilter.addEventListener("change", renderTasks);
+
+    document.querySelectorAll(".dock-tab").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".dock-tab").forEach(item => item.classList.remove("active"));
+        document.querySelectorAll(".tab-page").forEach(page => page.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById("tab-" + button.dataset.tab).classList.add("active");
+      });
+    });
+
+    window.setTimeout(() => intro.classList.add("hidden"), 5600);
+    render();
+  </script>
+</body>
+</html>
