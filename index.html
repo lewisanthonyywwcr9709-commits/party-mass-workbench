@@ -351,6 +351,28 @@
     .comment-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--gold); }
     .comment-body { color: rgba(255,244,223,.78); white-space: pre-wrap; line-height: 1.7; }
     .empty { color: rgba(255,244,223,.62); padding: 24px; text-align: center; border: 1px dashed rgba(255,255,255,.22); border-radius: 22px; }
+    .form-embed {
+      min-height: 420px;
+      overflow: hidden;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(circle at 70% 20%, rgba(245,196,107,.16), transparent 14rem),
+        rgba(255,255,255,.07);
+    }
+    .form-embed iframe {
+      display: block;
+      width: 100%;
+      height: 520px;
+      border: 0;
+      background: #fff;
+    }
+    .setup-list {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      color: rgba(255,244,223,.68);
+      line-height: 1.8;
+    }
 
     .drawer {
       position: fixed;
@@ -427,7 +449,7 @@
       <a href="#automation">自动化</a>
       <a href="#comments">沟通区</a>
     </div>
-    <a class="share" href="https://lewisanthonyywwcr9709-commits.github.io/party-mass-workbench/?v=20260802-3" target="_blank" rel="noreferrer">分享页面</a>
+    <a class="share" href="https://lewisanthonyywwcr9709-commits.github.io/party-mass-workbench/?v=20260802-4" target="_blank" rel="noreferrer">分享页面</a>
   </nav>
 
   <header id="top" class="hero">
@@ -514,20 +536,30 @@
 
     <section id="comments">
       <div class="section-head">
-        <div><h2>部门沟通区</h2><p>这里接入 GitHub Issue 评论，别人打开公开网页也能看到同一份留言；发言需要登录 GitHub。</p></div>
+        <div><h2>部门沟通区</h2><p>试接入腾讯文档“收集表”：同事不用 GitHub，直接填写姓名、事项和留言，结果自动汇总到腾讯文档表格。</p></div>
       </div>
       <div class="comments-shell">
         <article class="card">
-          <div class="eyebrow"><span class="dot"></span> SHARED COMMENTS</div>
-          <h3>用法说明</h3>
-          <p>点击“去留言”会打开 GitHub 评论页。同事留言后，回到本页面点刷新即可同步显示。后续如果要免登录评论，需要接数据库或表单服务。</p>
+          <div class="eyebrow"><span class="dot"></span> TENCENT DOCS FORM</div>
+          <h3>腾讯文档在线表单</h3>
+          <p>当前已把沟通区改成腾讯文档收集表模式。你只需要在腾讯文档里新建“收集表”，发布后把分享链接替换进网页即可。</p>
+          <ol class="setup-list">
+            <li>打开腾讯文档，点击“新建” → “收集表”。</li>
+            <li>建议字段：姓名、模块、事项、留言、是否需要反馈。</li>
+            <li>发布后复制填写链接，发给我即可换成正式内嵌表单。</li>
+          </ol>
           <div class="comment-actions">
-            <button class="btn primary" id="refreshComments">刷新评论</button>
-            <a class="btn" href="https://github.com/lewisanthonyywwcr9709-commits/party-mass-workbench/issues/1" target="_blank" rel="noreferrer">去留言</a>
+            <a class="btn primary" id="openTencentForm" href="https://docs.qq.com/desktop/" target="_blank" rel="noreferrer">去腾讯文档创建</a>
+            <button class="btn" id="copyFormFields">复制推荐字段</button>
           </div>
         </article>
         <article class="card">
-          <div id="commentsList" class="comment-list"><div class="empty">正在读取部门留言……</div></div>
+          <div id="formBox" class="form-embed">
+            <div class="empty">
+              <strong>等待接入你的腾讯文档收集表链接</strong><br />
+              腾讯文档表单发布后，把链接发我；我会把这里替换成网页内填写区，同事不用跳 GitHub。
+            </div>
+          </div>
         </article>
       </div>
     </section>
@@ -540,8 +572,8 @@
   <div class="toast" id="toast">已完成并触发反馈</div>
 
   <script>
-    const issueCommentsApi = "https://api.github.com/repos/lewisanthonyywwcr9709-commits/party-mass-workbench/issues/1/comments";
-    const shareUrl = "https://lewisanthonyywwcr9709-commits.github.io/party-mass-workbench/?v=20260802-3";
+    const tencentFormUrl = "";
+    const shareUrl = "https://lewisanthonyywwcr9709-commits.github.io/party-mass-workbench/?v=20260802-4";
     const tasks = [
       { title: "党委会材料收口与会前清单核对", module: "党建", owner: "陈主任", deadline: "10:30", progress: 72 },
       { title: "统战工作半年台账更新", module: "党建", owner: "林专员", deadline: "11:40", progress: 45 },
@@ -611,26 +643,10 @@
     function formatDate(value) {
       return new Intl.DateTimeFormat("zh-CN", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
     }
-    async function loadComments() {
-      const box = $("#commentsList");
-      box.innerHTML = `<div class="empty">正在读取部门留言……</div>`;
-      try {
-        const response = await fetch(issueCommentsApi, { headers: { "Accept": "application/vnd.github+json" } });
-        if (!response.ok) throw new Error("GitHub API " + response.status);
-        const comments = await response.json();
-        if (!comments.length) {
-          box.innerHTML = `<div class="empty">还没有留言。点击“去留言”发起第一条部门沟通。</div>`;
-          return;
-        }
-        box.innerHTML = comments.slice(-12).reverse().map(comment => `
-          <div class="comment">
-            <div class="comment-head"><strong>${escapeHtml(comment.user.login)}</strong><span>${formatDate(comment.created_at)}</span></div>
-            <div class="comment-body">${escapeHtml(comment.body)}</div>
-          </div>
-        `).join("");
-      } catch (error) {
-        box.innerHTML = `<div class="empty">评论暂时读取失败，可直接点击“去留言”查看 GitHub 沟通区。</div>`;
-      }
+    function renderTencentForm() {
+      const box = $("#formBox");
+      if (!tencentFormUrl) return;
+      box.innerHTML = `<iframe title="部门沟通收集表" src="${escapeHtml(tencentFormUrl)}" loading="lazy"></iframe>`;
     }
 
     $("#completeOne").addEventListener("click", () => {
@@ -646,11 +662,14 @@
       await navigator.clipboard.writeText(shareUrl);
       showToast("分享链接已复制");
     });
-    $("#refreshComments").addEventListener("click", loadComments);
+    $("#copyFormFields").addEventListener("click", async () => {
+      await navigator.clipboard.writeText("姓名｜模块（党建/宣传/综合）｜事项标题｜留言内容｜是否需要负责人反馈｜期望反馈时间");
+      showToast("推荐字段已复制");
+    });
     $("#drawerClose").addEventListener("click", () => drawer.classList.remove("open"));
 
     render();
-    loadComments();
+    renderTencentForm();
   </script>
 </body>
 </html>
