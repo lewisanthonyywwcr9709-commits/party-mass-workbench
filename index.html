@@ -123,8 +123,41 @@
       opacity: .62;
     }
 
+    .party-emblem {
+      position: absolute;
+      right: 9%;
+      top: 14%;
+      width: min(30vw, 340px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle, rgba(244,213,138,.42) 0 2px, transparent 3px 100%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.2), rgba(244,213,138,.12) 42%, transparent 68%);
+      box-shadow: 0 0 90px rgba(244,213,138,.22);
+      animation: emblemFloat 5.8s ease-in-out infinite;
+    }
+
+    .party-emblem svg {
+      width: 72%;
+      height: 72%;
+      filter: drop-shadow(0 22px 34px rgba(0,0,0,.24));
+      animation: emblemSpin 7s cubic-bezier(.2,.7,.2,1) infinite;
+      transform-origin: center;
+    }
+
+    .emblem-ring {
+      position: absolute;
+      inset: 9%;
+      border: 1px solid rgba(244,213,138,.28);
+      border-radius: 50%;
+      animation: ringPulse 2.8s ease-in-out infinite;
+    }
+
     .intro-content {
       position: relative;
+      z-index: 2;
       width: min(980px, calc(100vw - 44px));
       padding: 48px;
       border: 1px solid rgba(255,255,255,.18);
@@ -173,6 +206,27 @@
     .intro-actions .enter {
       background: #fff;
       color: var(--red-900);
+    }
+
+    .intro-progress {
+      position: absolute;
+      left: 48px;
+      right: 48px;
+      bottom: 28px;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      overflow: hidden;
+    }
+
+    .intro-progress span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--gold-300), white);
+      transform-origin: left;
+      animation: introLoad 5.2s linear both;
     }
 
     .shell {
@@ -251,6 +305,10 @@
       color: white;
       background: linear-gradient(135deg, var(--red-700), var(--red-900));
       box-shadow: 0 10px 24px rgba(116, 35, 24, .22);
+    }
+
+    .dock-tab.pulse {
+      animation: tabPulse .9s ease;
     }
 
     .dock-actions {
@@ -370,6 +428,36 @@
       display: block;
       margin-top: 10px;
       color: var(--gold-300);
+    }
+
+    .system-strip {
+      width: min(1440px, calc(100vw - 44px));
+      margin: 0 auto 22px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .system-chip {
+      min-height: 94px;
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255,255,255,.66);
+      box-shadow: 0 18px 46px rgba(89,19,15,.1);
+      backdrop-filter: blur(24px);
+    }
+
+    .system-chip b {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .system-chip span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
     }
 
     .content {
@@ -515,6 +603,14 @@
       border-radius: 16px;
       background: rgba(255,255,255,.72);
       border: 1px solid rgba(116,47,35,.1);
+      cursor: pointer;
+      transition: transform .24s ease, box-shadow .24s ease, background .24s ease;
+    }
+
+    .person:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 18px 40px rgba(116,47,35,.14);
+      background: rgba(255,255,255,.92);
     }
 
     .avatar {
@@ -526,6 +622,18 @@
       color: white;
       font-weight: 900;
       background: linear-gradient(135deg, var(--red-700), var(--gold-500));
+      position: relative;
+      overflow: hidden;
+      animation: avatarBreathe 3.2s ease-in-out infinite;
+    }
+
+    .avatar::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,.42), transparent);
+      transform: translateX(-120%);
+      animation: avatarSweep 4.4s ease-in-out infinite;
     }
 
     .person strong { display: block; }
@@ -605,6 +713,153 @@
       display: block;
     }
 
+    .automation-grid {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .automation-card {
+      position: relative;
+      min-height: 176px;
+      padding: 18px;
+      border: 1px solid rgba(116,47,35,.1);
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      overflow: hidden;
+    }
+
+    .automation-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: linear-gradient(180deg, var(--red-700), var(--gold-500));
+    }
+
+    .automation-card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .automation-card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .automation-card code {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: rgba(180,35,24,.09);
+      color: var(--red-800);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: flex-end;
+      background: rgba(41, 10, 8, .28);
+      backdrop-filter: blur(10px);
+    }
+
+    .drawer.open {
+      display: flex;
+      animation: fadeIn .18s ease both;
+    }
+
+    .drawer-panel {
+      width: min(520px, calc(100vw - 26px));
+      height: calc(100vh - 26px);
+      margin-right: 13px;
+      border: 1px solid rgba(255,255,255,.75);
+      border-radius: 24px;
+      padding: 24px;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 28px 90px rgba(63, 11, 9, .24);
+      overflow: auto;
+      animation: slideIn .28s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .drawer-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .drawer-head h3 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .drawer-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .close-btn {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      font-size: 20px;
+    }
+
+    .detail-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.72);
+    }
+
+    .detail-card b {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 60;
+      max-width: 360px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,.74);
+      border-radius: 16px;
+      color: white;
+      background: linear-gradient(135deg, var(--red-700), var(--red-950));
+      box-shadow: 0 18px 46px rgba(63,11,9,.24);
+      transform: translateY(30px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .24s ease, transform .24s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     @keyframes cinematicMove {
       from { transform: scale(1.05) translate3d(-1%, -1%, 0); }
       to { transform: scale(1.13) translate3d(1%, 1%, 0); }
@@ -621,12 +876,60 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    @keyframes emblemSpin {
+      0% { transform: rotateY(0deg) rotateZ(0deg) scale(.92); }
+      45% { transform: rotateY(180deg) rotateZ(8deg) scale(1.02); }
+      100% { transform: rotateY(360deg) rotateZ(0deg) scale(.92); }
+    }
+
+    @keyframes emblemFloat {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(-12px, 18px, 0); }
+    }
+
+    @keyframes ringPulse {
+      0%, 100% { transform: scale(.95); opacity: .45; }
+      50% { transform: scale(1.08); opacity: .9; }
+    }
+
+    @keyframes introLoad {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    @keyframes avatarBreathe {
+      0%, 100% { box-shadow: 0 0 0 rgba(180,35,24,0); }
+      50% { box-shadow: 0 0 0 6px rgba(180,35,24,.08); }
+    }
+
+    @keyframes avatarSweep {
+      0%, 62% { transform: translateX(-120%); }
+      100% { transform: translateX(120%); }
+    }
+
+    @keyframes tabPulse {
+      from { transform: scale(1); }
+      50% { transform: scale(1.06); }
+      to { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(30px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
     @media (max-width: 1180px) {
-      .top-dock, .hero, .content { width: calc(100vw - 28px); }
+      .top-dock, .hero, .content, .system-strip { width: calc(100vw - 28px); }
       .top-dock { grid-template-columns: 1fr; border-radius: 24px; }
       .dock-tabs, .dock-actions { justify-content: flex-start; flex-wrap: wrap; }
       .hero-inner, .main-grid, .module-grid { grid-template-columns: 1fr; }
       .hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .system-strip, .automation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 720px) {
@@ -637,12 +940,32 @@
       .person { grid-template-columns: 46px 1fr; }
       .person .status { grid-column: 2; justify-self: start; }
       .intro-content { padding: 28px; }
+      .party-emblem { opacity: .26; right: -16%; top: 6%; width: 360px; }
+      .system-strip, .automation-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="intro" id="intro">
     <div class="intro-video" aria-hidden="true"></div>
+    <div class="party-emblem" aria-hidden="true">
+      <div class="emblem-ring"></div>
+      <svg viewBox="0 0 240 240" role="img" aria-label="党徽旋转动画">
+        <defs>
+          <linearGradient id="emblemGold" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#fff1a8"/>
+            <stop offset=".42" stop-color="#f4c766"/>
+            <stop offset="1" stop-color="#b97918"/>
+          </linearGradient>
+        </defs>
+        <circle cx="120" cy="120" r="104" fill="rgba(111,22,16,.36)" stroke="url(#emblemGold)" stroke-width="7"/>
+        <path d="M70 138c38-18 68-42 94-76l22 18c-30 42-64 70-108 90l-8-32Z" fill="url(#emblemGold)"/>
+        <path d="M77 69c20-17 51-15 69 3l-17 17c-10-8-25-8-35 0L77 69Z" fill="url(#emblemGold)"/>
+        <path d="M87 82l22-22 67 67-22 22L87 82Z" fill="url(#emblemGold)"/>
+        <path d="M65 164h106c10 0 18 8 18 18v2H47v-2c0-10 8-18 18-18Z" fill="url(#emblemGold)"/>
+        <path d="M60 184h130v16H60z" fill="url(#emblemGold)"/>
+      </svg>
+    </div>
     <div class="intro-content">
       <div class="intro-kicker">STATE-OWNED ENTERPRISE PARTY-MASS OFFICE</div>
       <h1>党建引领<br />宣传赋能</h1>
@@ -651,6 +974,7 @@
         <button class="enter" id="enterBtn">进入工作台</button>
         <button id="replayBtn">观看开场</button>
       </div>
+      <div class="intro-progress"><span></span></div>
     </div>
   </div>
 
@@ -668,6 +992,7 @@
         <button class="dock-tab" data-tab="party">党建</button>
         <button class="dock-tab" data-tab="media">宣传</button>
         <button class="dock-tab" data-tab="review">审稿</button>
+        <button class="dock-tab" data-tab="automation">自动化</button>
       </nav>
       <div class="dock-actions">
         <select id="moduleFilter" aria-label="筛选模块">
@@ -698,6 +1023,13 @@
         </div>
       </div>
     </section>
+
+    <div class="system-strip">
+      <div class="system-chip"><b>自动触发</b><span>临近截止、进度停滞、审稿退回、重点事项新增时提醒。</span></div>
+      <div class="system-chip"><b>自动反馈</b><span>完成 100%、延期、待复核、领导关注事项变更时生成反馈。</span></div>
+      <div class="system-chip"><b>人员画像</b><span>点击员工卡片查看当日任务、负荷、风险和建议动作。</span></div>
+      <div class="system-chip"><b>苹果式体验</b><span>入场动效、毛玻璃、抽屉详情、顺滑切换和状态提示。</span></div>
+    </div>
 
     <main class="content">
       <div class="tab-page active" id="tab-overview">
@@ -795,8 +1127,67 @@
           </div>
         </section>
       </div>
+
+      <div class="tab-page" id="tab-automation">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>自动化触发与反馈规则</h3>
+              <p>先作为部门规则说明，后续可接入真实消息提醒、日报和待办系统</p>
+            </div>
+            <span class="pill">Automation</span>
+          </div>
+          <div class="automation-grid">
+            <div class="automation-card">
+              <strong>什么时候触发</strong>
+              <p>新增重点任务、任务截止前 2 小时、进度 4 小时未更新、审稿退回、领导临时交办、舆情风险出现。</p>
+              <code>触发：任务状态变化</code>
+            </div>
+            <div class="automation-card">
+              <strong>什么时候反馈</strong>
+              <p>任务完成到 100%、超过截止时间、审稿进入终审、宣传内容发布、党建材料完成归档。</p>
+              <code>反馈：完成 / 延期 / 风险</code>
+            </div>
+            <div class="automation-card">
+              <strong>反馈给谁</strong>
+              <p>责任人收到执行提醒，模块负责人收到进度汇总，部门负责人收到重点事项和延期风险。</p>
+              <code>对象：责任链条</code>
+            </div>
+            <div class="automation-card">
+              <strong>反馈什么</strong>
+              <p>任务名称、责任人、当前进度、卡点说明、下一步动作、是否需要协调资源。</p>
+              <code>内容：可行动信息</code>
+            </div>
+            <div class="automation-card">
+              <strong>每日节奏</strong>
+              <p>09:00 自动生成今日清单，15:00 推送半日进度，18:00 汇总完成情况和明日遗留。</p>
+              <code>节奏：早派发 晚闭环</code>
+            </div>
+            <div class="automation-card">
+              <strong>质量红线</strong>
+              <p>政治表述、单位名称、数字口径、图片授权、意识形态风险，一旦标记即进入强制复核。</p>
+              <code>红线：强制审稿</code>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
   </div>
+
+  <div class="drawer" id="personDrawer" aria-hidden="true">
+    <div class="drawer-panel">
+      <div class="drawer-head">
+        <div>
+          <h3 id="drawerName">员工详情</h3>
+          <p id="drawerRole">查看今日工作、进度和系统建议。</p>
+        </div>
+        <button class="close-btn" id="closeDrawer" aria-label="关闭">×</button>
+      </div>
+      <div class="detail-stack" id="drawerContent"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">系统反馈</div>
 
   <script>
     const defaultTasks = [
@@ -811,10 +1202,10 @@
     ];
 
     const people = [
-      { name: "陈主任", role: "统筹党建材料、重要审核" },
-      { name: "林专员", role: "党务台账、统战群团" },
-      { name: "黄编辑", role: "公众号、新闻稿、审稿" },
-      { name: "吴策划", role: "视频号、专题策划、素材" }
+      { name: "陈主任", role: "统筹党建材料、重要审核", focus: "把控政治方向和重点材料收口", avatar: "陈" },
+      { name: "林专员", role: "党务台账、统战群团", focus: "维护党务基础工作闭环", avatar: "林" },
+      { name: "黄编辑", role: "公众号、新闻稿、审稿", focus: "保障内容表达和发布质量", avatar: "黄" },
+      { name: "吴策划", role: "视频号、专题策划、素材", focus: "提升影像策划和品牌表达", avatar: "吴" }
     ];
 
     const storageKey = "partyMassWorkbenchTasks-v2";
@@ -825,11 +1216,23 @@
     const peopleList = document.getElementById("peopleList");
     const moduleFilter = document.getElementById("moduleFilter");
     const ownerFilter = document.getElementById("ownerFilter");
+    const drawer = document.getElementById("personDrawer");
+    const drawerName = document.getElementById("drawerName");
+    const drawerRole = document.getElementById("drawerRole");
+    const drawerContent = document.getElementById("drawerContent");
+    const toast = document.getElementById("toast");
 
     document.getElementById("todayText").textContent = new Intl.DateTimeFormat("zh-CN", { dateStyle: "full" }).format(new Date());
 
     function save() {
       localStorage.setItem(storageKey, JSON.stringify(tasks));
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 3200);
     }
 
     function statusText(value) {
@@ -887,9 +1290,16 @@
     function bindRanges(container) {
       container.querySelectorAll("input[type='range']").forEach(input => {
         input.addEventListener("input", event => {
-          tasks[event.target.dataset.index].progress = Number(event.target.value);
+          const task = tasks[event.target.dataset.index];
+          const before = Number(task.progress);
+          task.progress = Number(event.target.value);
           save();
           render();
+          if (before < 100 && task.progress >= 100) {
+            showToast(`自动反馈：${task.owner} 已完成「${task.title}」，可进入复核或归档。`);
+          } else if (task.progress >= 80) {
+            showToast(`自动提醒：${task.title} 已进入收口阶段，建议准备反馈材料。`);
+          }
         });
       });
     }
@@ -913,13 +1323,40 @@
         const owned = tasks.filter(task => task.owner === person.name);
         const avg = owned.length ? Math.round(owned.reduce((sum, task) => sum + Number(task.progress), 0) / owned.length) : 0;
         return `
-          <div class="person">
-            <div class="avatar">${person.name.slice(0, 1)}</div>
+          <div class="person" data-person="${person.name}" role="button" tabindex="0" aria-label="查看${person.name}详情">
+            <div class="avatar">${person.avatar}</div>
             <div><strong>${person.name}</strong><span>${person.role} · ${owned.length} 项任务</span></div>
             <div class="status">${avg}%</div>
           </div>
         `;
       }).join("");
+      peopleList.querySelectorAll(".person").forEach(card => {
+        card.addEventListener("click", () => openPerson(card.dataset.person));
+        card.addEventListener("keypress", event => {
+          if (event.key === "Enter") openPerson(card.dataset.person);
+        });
+      });
+    }
+
+    function openPerson(name) {
+      const person = people.find(item => item.name === name);
+      const owned = tasks.filter(task => task.owner === name);
+      const avg = owned.length ? Math.round(owned.reduce((sum, task) => sum + Number(task.progress), 0) / owned.length) : 0;
+      const risks = owned.filter(task => task.priority === "重点" && task.progress < 70);
+      drawerName.textContent = `${person.name} · 今日画像`;
+      drawerRole.textContent = `${person.role}。${person.focus}。`;
+      drawerContent.innerHTML = `
+        <div class="detail-card"><b>综合进度</b><p>${avg}% · ${owned.length} 项任务 · ${risks.length} 项重点风险</p></div>
+        <div class="detail-card"><b>系统建议</b><p>${risks.length ? "优先推动重点事项收口，并在半日节点反馈卡点。" : "当前节奏较稳，可准备完成反馈和素材归档。"}</p></div>
+        ${owned.map(task => `<div class="detail-card"><b>${task.title}</b><p>${task.module} · ${task.priority} · 截止 ${task.deadline} · 当前 ${task.progress}%</p></div>`).join("")}
+      `;
+      drawer.classList.add("open");
+      drawer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
     }
 
     function render() {
@@ -928,12 +1365,19 @@
       renderPeople();
     }
 
-    document.getElementById("enterBtn").addEventListener("click", () => intro.classList.add("hidden"));
+    document.getElementById("enterBtn").addEventListener("click", () => {
+      intro.classList.add("hidden");
+      showToast("自动反馈：已进入今日工作台，系统开始监听任务进度。");
+    });
     document.getElementById("replayBtn").addEventListener("click", () => {
       intro.classList.remove("hidden");
       window.setTimeout(() => intro.classList.add("hidden"), 5200);
     });
     document.getElementById("showIntroBtn").addEventListener("click", () => intro.classList.remove("hidden"));
+    document.getElementById("closeDrawer").addEventListener("click", closeDrawer);
+    drawer.addEventListener("click", event => {
+      if (event.target === drawer) closeDrawer();
+    });
 
     document.getElementById("addBtn").addEventListener("click", () => {
       const title = prompt("输入新任务名称");
@@ -952,11 +1396,17 @@
         document.querySelectorAll(".dock-tab").forEach(item => item.classList.remove("active"));
         document.querySelectorAll(".tab-page").forEach(page => page.classList.remove("active"));
         button.classList.add("active");
+        button.classList.add("pulse");
+        window.setTimeout(() => button.classList.remove("pulse"), 900);
         document.getElementById("tab-" + button.dataset.tab).classList.add("active");
+        if (button.dataset.tab === "automation") showToast("自动化规则已打开：可查看触发条件和反馈对象。");
       });
     });
 
-    window.setTimeout(() => intro.classList.add("hidden"), 5600);
+    window.setTimeout(() => {
+      intro.classList.add("hidden");
+      showToast("自动反馈：片头播放完成，已进入工作台。");
+    }, 5600);
     render();
   </script>
 </body>
