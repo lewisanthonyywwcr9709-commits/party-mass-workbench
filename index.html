@@ -6,1408 +6,651 @@
   <title>党群宣传部智能工作台</title>
   <style>
     :root {
-      --red-950: #3f0b09;
-      --red-900: #67130f;
-      --red-800: #8f1d17;
-      --red-700: #b42318;
-      --red-500: #df3f32;
-      --gold-500: #d6a34b;
-      --gold-300: #f4d58a;
-      --ink: #211a18;
-      --muted: #7c706a;
-      --line: rgba(116, 47, 35, .14);
-      --glass: rgba(255, 255, 255, .72);
-      --glass-strong: rgba(255, 255, 255, .88);
-      --bg: #f7eee8;
-      --green: #1f7a4d;
-      --blue: #205b8d;
-      --shadow: 0 24px 70px rgba(89, 19, 15, .15);
-      --radius: 18px;
+      --red: #d71920;
+      --deep: #160306;
+      --wine: #5f0710;
+      --gold: #f5c46b;
+      --cream: #fff4df;
+      --ink: #1f1113;
+      --muted: #8f7477;
+      --glass: rgba(255, 255, 255, .10);
+      --line: rgba(255, 255, 255, .18);
+      --shadow: 0 28px 90px rgba(72, 0, 8, .28);
+      --radius: 30px;
     }
 
     * { box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      color: var(--ink);
-      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--cream);
       background:
-        radial-gradient(circle at 18% 8%, rgba(214, 163, 75, .18), transparent 30%),
-        radial-gradient(circle at 76% 0%, rgba(180, 35, 24, .18), transparent 28%),
-        linear-gradient(135deg, #fff8f3 0%, #f5ebe4 44%, #eee0d6 100%);
+        radial-gradient(circle at 15% 5%, rgba(245, 196, 107, .25), transparent 28rem),
+        radial-gradient(circle at 88% 8%, rgba(215, 25, 32, .38), transparent 30rem),
+        linear-gradient(135deg, #110204 0%, #260409 42%, #070203 100%);
       overflow-x: hidden;
     }
 
-    button, select, input {
-      font: inherit;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .34;
+      background-image:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 58px 58px;
+      mask-image: linear-gradient(to bottom, #000, transparent 82%);
+      z-index: -2;
     }
 
-    button, select {
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255,255,255,.72);
-      color: var(--ink);
-      padding: 11px 14px;
-      backdrop-filter: blur(18px);
-    }
-
-    button {
-      cursor: pointer;
-      font-weight: 700;
-      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(116, 47, 35, .16);
-    }
-
-    .primary {
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--red-700), var(--red-900));
-      color: white;
-    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; border: 0; }
 
     .intro {
       position: fixed;
       inset: 0;
-      z-index: 50;
-      display: grid;
-      place-items: center;
-      color: white;
-      background: #240503;
-      overflow: hidden;
-      transition: opacity .7s ease, visibility .7s ease;
-    }
-
-    .intro.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .intro-video {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(115deg, rgba(63, 11, 9, .96), rgba(145, 29, 21, .82) 42%, rgba(39, 8, 6, .94)),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='900' viewBox='0 0 1400 900'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23f4d58a' stop-opacity='.34'/%3E%3Cstop offset='1' stop-color='%23ffffff' stop-opacity='.04'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 650 C220 570 360 770 560 610 C780 432 950 530 1400 300 L1400 900 L0 900 Z' fill='url(%23g)'/%3E%3Cpath d='M120 140 L470 140 L520 190 L830 190' fill='none' stroke='%23f4d58a' stroke-opacity='.22' stroke-width='2'/%3E%3Cpath d='M900 90 L1120 90 L1180 150 L1340 150' fill='none' stroke='%23fff' stroke-opacity='.14' stroke-width='2'/%3E%3Ccircle cx='1030' cy='360' r='210' fill='none' stroke='%23f4d58a' stroke-opacity='.13' stroke-width='2'/%3E%3Ccircle cx='1030' cy='360' r='132' fill='none' stroke='%23fff' stroke-opacity='.1' stroke-width='2'/%3E%3C/svg%3E");
-      background-size: cover;
-      transform: scale(1.05);
-      animation: cinematicMove 7s ease-in-out infinite alternate;
-    }
-
-    .intro-video::before {
-      content: "";
-      position: absolute;
-      inset: -20%;
-      background:
-        linear-gradient(100deg, transparent 0 34%, rgba(255,255,255,.14) 39%, transparent 45% 100%),
-        repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 1px, transparent 1px 90px);
-      animation: scan 4.8s ease-in-out infinite;
-    }
-
-    .intro-video::after {
-      content: "";
-      position: absolute;
-      inset: auto -10% 0;
-      height: 44%;
-      background:
-        linear-gradient(0deg, rgba(0,0,0,.4), transparent),
-        repeating-linear-gradient(110deg, rgba(244,213,138,.28) 0 2px, transparent 2px 18px);
-      clip-path: polygon(0 54%, 18% 30%, 33% 48%, 52% 18%, 71% 36%, 100% 8%, 100% 100%, 0 100%);
-      opacity: .62;
-    }
-
-    .party-emblem {
-      position: absolute;
-      right: 9%;
-      top: 14%;
-      width: min(30vw, 340px);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(circle, rgba(244,213,138,.42) 0 2px, transparent 3px 100%),
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,.2), rgba(244,213,138,.12) 42%, transparent 68%);
-      box-shadow: 0 0 90px rgba(244,213,138,.22);
-      animation: emblemFloat 5.8s ease-in-out infinite;
-    }
-
-    .party-emblem svg {
-      width: 72%;
-      height: 72%;
-      filter: drop-shadow(0 22px 34px rgba(0,0,0,.24));
-      animation: emblemSpin 7s cubic-bezier(.2,.7,.2,1) infinite;
-      transform-origin: center;
-    }
-
-    .emblem-ring {
-      position: absolute;
-      inset: 9%;
-      border: 1px solid rgba(244,213,138,.28);
-      border-radius: 50%;
-      animation: ringPulse 2.8s ease-in-out infinite;
-    }
-
-    .intro-content {
-      position: relative;
-      z-index: 2;
-      width: min(980px, calc(100vw - 44px));
-      padding: 48px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 24px;
-      background: rgba(255,255,255,.08);
-      box-shadow: 0 40px 120px rgba(0,0,0,.36);
-      backdrop-filter: blur(20px);
-    }
-
-    .intro-kicker {
-      color: var(--gold-300);
-      font-weight: 800;
-      letter-spacing: 8px;
-      font-size: 13px;
-    }
-
-    .intro h1 {
-      margin: 18px 0 16px;
-      font-size: clamp(40px, 7vw, 86px);
-      line-height: 1;
-      letter-spacing: 0;
-    }
-
-    .intro p {
-      width: min(660px, 100%);
-      margin: 0;
-      color: rgba(255,255,255,.82);
-      line-height: 1.9;
-      font-size: 16px;
-    }
-
-    .intro-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 34px;
-      flex-wrap: wrap;
-    }
-
-    .intro-actions button {
-      background: rgba(255,255,255,.14);
-      border-color: rgba(255,255,255,.28);
-      color: #fff;
-      min-width: 132px;
-    }
-
-    .intro-actions .enter {
-      background: #fff;
-      color: var(--red-900);
-    }
-
-    .intro-progress {
-      position: absolute;
-      left: 48px;
-      right: 48px;
-      bottom: 28px;
-      height: 3px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.14);
-      overflow: hidden;
-    }
-
-    .intro-progress span {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--gold-300), white);
-      transform-origin: left;
-      animation: introLoad 5.2s linear both;
-    }
-
-    .shell {
-      min-height: 100vh;
-      padding: 22px;
-    }
-
-    .top-dock {
-      position: sticky;
-      top: 16px;
       z-index: 20;
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 18px;
-      width: min(1440px, calc(100vw - 44px));
+      place-items: center;
+      background:
+        radial-gradient(circle, rgba(215,25,32,.42), transparent 18rem),
+        linear-gradient(135deg, #230005, #060102);
+      animation: introOut .9s ease 2.8s forwards;
+    }
+
+    .intro-core { text-align: center; }
+    .emblem {
+      width: 118px;
+      height: 118px;
       margin: 0 auto 24px;
-      padding: 12px 14px;
-      border: 1px solid rgba(255,255,255,.72);
-      border-radius: 999px;
-      background: rgba(255,255,255,.68);
-      box-shadow: 0 18px 60px rgba(94, 28, 18, .12);
-      backdrop-filter: blur(28px) saturate(1.2);
-    }
-
-    .identity {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      min-width: 0;
-    }
-
-    .mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+      border-radius: 50%;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--red-700), var(--red-950));
-      color: #fff;
+      color: var(--gold);
+      font-size: 58px;
       font-weight: 900;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.24), 0 12px 24px rgba(116, 35, 24, .26);
+      background: radial-gradient(circle, #bf1119, #5a0209);
+      box-shadow: 0 0 0 10px rgba(245,196,107,.12), 0 0 80px rgba(245,196,107,.42);
+      animation: spinBadge 2.8s cubic-bezier(.2,.8,.2,1);
     }
 
-    .identity strong {
-      display: block;
-      white-space: nowrap;
+    .intro h2 { margin: 0; font-size: clamp(26px, 4vw, 52px); letter-spacing: .18em; }
+    .intro p { color: rgba(255,244,223,.72); letter-spacing: .42em; }
+    .intro-line {
+      width: 280px;
+      height: 4px;
+      margin: 28px auto 0;
       overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .identity span {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .dock-tabs {
-      display: flex;
-      gap: 6px;
-      padding: 5px;
       border-radius: 999px;
-      background: rgba(130, 55, 43, .08);
+      background: rgba(255,255,255,.12);
     }
+    .intro-line span { display: block; height: 100%; background: linear-gradient(90deg, var(--red), var(--gold)); animation: loadLine 2.6s ease forwards; }
 
-    .dock-tab {
-      border: 0;
-      padding: 10px 16px;
-      color: var(--muted);
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .dock-tab.active {
-      color: white;
-      background: linear-gradient(135deg, var(--red-700), var(--red-900));
-      box-shadow: 0 10px 24px rgba(116, 35, 24, .22);
-    }
-
-    .dock-tab.pulse {
-      animation: tabPulse .9s ease;
-    }
-
-    .dock-actions {
+    .nav {
+      position: sticky;
+      top: 18px;
+      z-index: 10;
+      width: min(1180px, calc(100% - 28px));
+      margin: 18px auto 0;
+      padding: 10px 10px 10px 18px;
       display: flex;
-      gap: 10px;
       align-items: center;
-      justify-content: flex-end;
-      min-width: 0;
+      justify-content: space-between;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(22, 3, 6, .62);
+      backdrop-filter: blur(24px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.22);
+    }
+
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 800; letter-spacing: .04em; }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 12px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--red), #7a0810);
+      color: var(--gold);
+    }
+    .nav-links { display: flex; gap: 6px; align-items: center; }
+    .nav-links a {
+      padding: 10px 15px;
+      border-radius: 999px;
+      color: rgba(255,244,223,.78);
+      transition: .25s ease;
+    }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,.12); }
+    .share {
+      padding: 11px 18px;
+      border-radius: 999px;
+      color: #321006;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gold), #ffe8a8);
     }
 
     .hero {
+      width: min(1240px, calc(100% - 32px));
+      margin: 52px auto 0;
+      min-height: 690px;
       position: relative;
-      width: min(1440px, calc(100vw - 44px));
-      min-height: 460px;
-      margin: 0 auto 22px;
-      padding: 34px;
-      border: 1px solid rgba(255,255,255,.66);
-      border-radius: 28px;
       overflow: hidden;
-      color: white;
-      background:
-        linear-gradient(115deg, rgba(82, 13, 10, .96), rgba(173, 37, 27, .82) 54%, rgba(50, 8, 6, .94)),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='720' viewBox='0 0 1600 720'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23ffffff' stop-opacity='.22'/%3E%3Cstop offset='1' stop-color='%23f4d58a' stop-opacity='.05'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M70 560 C230 400 370 620 530 470 C710 302 830 410 1000 260 C1190 92 1340 170 1560 70' fill='none' stroke='url(%23a)' stroke-width='90' stroke-linecap='round'/%3E%3Cpath d='M850 520 L1210 210 L1510 455' fill='none' stroke='%23f4d58a' stroke-opacity='.28' stroke-width='4'/%3E%3Cpath d='M1020 500 L1210 315 L1410 500' fill='none' stroke='%23fff' stroke-opacity='.14' stroke-width='3'/%3E%3Ccircle cx='1260' cy='260' r='180' fill='none' stroke='%23fff' stroke-opacity='.09' stroke-width='2'/%3E%3C/svg%3E");
-      background-size: cover;
+      border-radius: 44px;
+      border: 1px solid rgba(255,255,255,.16);
       box-shadow: var(--shadow);
+      background:
+        linear-gradient(90deg, rgba(8,1,2,.92), rgba(88,5,12,.48), rgba(7,1,2,.28)),
+        radial-gradient(circle at 82% 30%, rgba(245,196,107,.34), transparent 19rem),
+        linear-gradient(135deg, #2b0308, #080102);
     }
 
     .hero::before {
       content: "";
       position: absolute;
-      inset: 0;
+      inset: -30%;
       background:
-        linear-gradient(90deg, rgba(255,255,255,.09) 0 1px, transparent 1px 100px),
-        linear-gradient(0deg, rgba(255,255,255,.07) 0 1px, transparent 1px 100px);
-      mask-image: linear-gradient(90deg, #000, transparent 72%);
+        conic-gradient(from 120deg, transparent 0 18%, rgba(215,25,32,.34) 19% 22%, transparent 23% 48%, rgba(245,196,107,.22) 49% 52%, transparent 53% 100%);
+      animation: slowRotate 18s linear infinite;
+      opacity: .7;
     }
-
     .hero::after {
       content: "";
       position: absolute;
-      width: 520px;
-      height: 520px;
-      right: -120px;
-      top: -80px;
-      border-radius: 50%;
-      border: 1px solid rgba(244,213,138,.28);
-      box-shadow: inset 0 0 0 80px rgba(244,213,138,.04), inset 0 0 0 160px rgba(255,255,255,.03);
+      inset: 0;
+      background:
+        linear-gradient(110deg, rgba(255,255,255,.09), transparent 26%, transparent 74%, rgba(255,255,255,.06)),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 6px);
+      pointer-events: none;
     }
 
-    .hero-inner {
+    .hero-content {
       position: relative;
       z-index: 1;
+      min-height: 690px;
+      padding: clamp(32px, 6vw, 76px);
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 420px;
-      gap: 32px;
-      height: 100%;
-      align-items: end;
-    }
-
-    .hero-copy {
-      align-self: center;
-      max-width: 780px;
+      grid-template-columns: 1.02fr .98fr;
+      gap: 30px;
+      align-items: center;
     }
 
     .eyebrow {
-      color: var(--gold-300);
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: 6px;
-    }
-
-    .hero h2 {
-      margin: 18px 0 18px;
-      font-size: clamp(44px, 6vw, 78px);
-      line-height: 1;
-      letter-spacing: 0;
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 650px;
-      color: rgba(255,255,255,.82);
-      font-size: 17px;
-      line-height: 1.9;
-    }
-
-    .hero-metrics {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      align-self: end;
-    }
-
-    .hero-card {
-      min-height: 126px;
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 18px;
-      padding: 18px;
-      background: rgba(255,255,255,.11);
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 9px 14px;
+      border: 1px solid rgba(245,196,107,.34);
+      border-radius: 999px;
+      color: rgba(255,244,223,.82);
+      background: rgba(255,255,255,.08);
       backdrop-filter: blur(18px);
     }
-
-    .hero-card span {
-      display: block;
-      color: rgba(255,255,255,.72);
-      font-size: 12px;
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 18px var(--gold); }
+    h1 {
+      margin: 24px 0 16px;
+      font-size: clamp(48px, 8vw, 104px);
+      line-height: .92;
+      letter-spacing: -.08em;
     }
-
-    .hero-card strong {
-      display: block;
-      margin-top: 12px;
-      font-size: 34px;
-      line-height: 1;
-    }
-
-    .hero-card small {
-      display: block;
-      margin-top: 10px;
-      color: var(--gold-300);
-    }
-
-    .system-strip {
-      width: min(1440px, calc(100vw - 44px));
-      margin: 0 auto 22px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .system-chip {
-      min-height: 94px;
-      border: 1px solid rgba(255,255,255,.7);
-      border-radius: 18px;
-      padding: 16px;
-      background: rgba(255,255,255,.66);
-      box-shadow: 0 18px 46px rgba(89,19,15,.1);
-      backdrop-filter: blur(24px);
-    }
-
-    .system-chip b {
-      display: block;
-      font-size: 15px;
-      margin-bottom: 8px;
-    }
-
-    .system-chip span {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.55;
-    }
-
-    .content {
-      width: min(1440px, calc(100vw - 44px));
-      margin: 0 auto;
-      display: grid;
-      gap: 18px;
-    }
-
-    .panel {
-      border: 1px solid rgba(255,255,255,.72);
-      border-radius: var(--radius);
-      background: var(--glass);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(28px) saturate(1.18);
-      overflow: hidden;
-    }
-
-    .panel-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      padding: 20px 22px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255,255,255,.36);
-    }
-
-    .panel-head h3 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .panel-head p {
-      margin: 5px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      height: 30px;
-      padding: 0 12px;
+    .hero p { max-width: 620px; color: rgba(255,244,223,.76); font-size: 18px; line-height: 1.8; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .btn {
+      padding: 14px 21px;
       border-radius: 999px;
-      color: var(--red-800);
-      background: rgba(180,35,24,.1);
-      font-size: 12px;
-      font-weight: 800;
-      white-space: nowrap;
+      color: #fff;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.16);
+      transition: transform .25s ease, background .25s ease;
     }
+    .btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.18); }
+    .btn.primary { color: #2c0801; font-weight: 900; background: linear-gradient(135deg, var(--gold), #fff0b6); }
 
-    .main-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.25fr) 420px;
+    .showreel {
+      position: relative;
+      min-height: 460px;
+      border-radius: 36px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(circle at 50% 28%, rgba(245,196,107,.34), transparent 10rem),
+        linear-gradient(135deg, rgba(215,25,32,.88), rgba(35,1,5,.78));
+      box-shadow: inset 0 0 70px rgba(0,0,0,.3);
+    }
+    .showreel .ring {
+      position: absolute;
+      inset: 46px;
+      border: 1px solid rgba(245,196,107,.42);
+      border-radius: 50%;
+      animation: pulseRing 3.6s ease-in-out infinite;
+    }
+    .showreel .ring:nth-child(2) { inset: 88px; animation-delay: .5s; }
+    .showreel .ring:nth-child(3) { inset: 130px; animation-delay: 1s; }
+    .play-card {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      bottom: 26px;
+      padding: 22px;
+      border-radius: 26px;
+      background: rgba(14,2,4,.72);
+      backdrop-filter: blur(22px);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .play-card strong { display: block; font-size: 22px; }
+    .play-card span { color: rgba(255,244,223,.64); }
+
+    .ticker {
+      width: min(1180px, calc(100% - 32px));
+      margin: 26px auto 0;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.08);
+    }
+    .ticker-track {
+      display: flex;
+      gap: 30px;
+      width: max-content;
+      padding: 14px 0;
+      animation: marquee 30s linear infinite;
+    }
+    .ticker span { color: rgba(255,244,223,.76); white-space: nowrap; }
+
+    main { width: min(1180px, calc(100% - 32px)); margin: 34px auto 80px; }
+    section { scroll-margin-top: 110px; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
       gap: 18px;
+      margin: 70px 0 22px;
     }
+    .section-head h2 { margin: 0; font-size: clamp(30px, 4vw, 58px); letter-spacing: -.06em; }
+    .section-head p { margin: 8px 0 0; color: rgba(255,244,223,.62); max-width: 620px; line-height: 1.7; }
 
-    .tasks {
-      padding: 16px;
-      display: grid;
-      gap: 12px;
+    .grid { display: grid; gap: 18px; }
+    .metrics { grid-template-columns: repeat(4, 1fr); }
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.055));
+      backdrop-filter: blur(22px);
+      box-shadow: 0 20px 70px rgba(0,0,0,.18);
     }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(245,196,107,.18), transparent 13rem);
+      pointer-events: none;
+    }
+    .metric b { display: block; font-size: 42px; letter-spacing: -.05em; }
+    .metric span, .card p { color: rgba(255,244,223,.62); line-height: 1.7; }
 
+    .feature-grid { grid-template-columns: 1.2fr .8fr; }
+    .cinema-card { min-height: 320px; display: flex; flex-direction: column; justify-content: space-between; }
+    .cinema-card h3 { margin: 0; font-size: 34px; letter-spacing: -.04em; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .chip { padding: 8px 11px; border-radius: 999px; background: rgba(255,255,255,.1); color: rgba(255,244,223,.72); }
+    .task-list { display: grid; gap: 12px; margin-top: 16px; }
     .task {
       display: grid;
-      grid-template-columns: 1fr 180px;
-      gap: 16px;
-      padding: 16px;
-      border: 1px solid rgba(116,47,35,.11);
-      border-radius: 16px;
-      background: rgba(255,255,255,.72);
-      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.08);
     }
+    .task-top { display: flex; justify-content: space-between; gap: 12px; }
+    .bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,.12); overflow: hidden; }
+    .bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--red), var(--gold)); }
 
-    .task:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 18px 40px rgba(116,47,35,.13);
-      background: rgba(255,255,255,.92);
-    }
-
-    .task h4 {
-      margin: 0 0 10px;
-      font-size: 17px;
-    }
-
-    .task-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      height: 26px;
-      border-radius: 999px;
-      padding: 0 9px;
-      background: rgba(255,255,255,.82);
-      border: 1px solid var(--line);
-    }
-
-    .tag.party { color: var(--red-800); }
-    .tag.media { color: var(--blue); }
-
-    .progress-box {
-      display: grid;
-      align-content: center;
-      gap: 9px;
-    }
-
-    .progress-top {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--red-700);
-    }
-
-    .side-stack {
-      display: grid;
-      gap: 18px;
-    }
-
-    .people {
-      padding: 16px;
-      display: grid;
-      gap: 12px;
-    }
-
+    .people { grid-template-columns: repeat(4, 1fr); }
     .person {
-      display: grid;
-      grid-template-columns: 46px 1fr auto;
-      gap: 12px;
-      align-items: center;
-      padding: 13px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.72);
-      border: 1px solid rgba(116,47,35,.1);
-      cursor: pointer;
-      transition: transform .24s ease, box-shadow .24s ease, background .24s ease;
+      text-align: left;
+      min-height: 280px;
+      color: var(--cream);
     }
-
-    .person:hover {
-      transform: translateY(-3px) scale(1.01);
-      box-shadow: 0 18px 40px rgba(116,47,35,.14);
-      background: rgba(255,255,255,.92);
-    }
-
     .avatar {
-      width: 46px;
-      height: 46px;
-      border-radius: 15px;
+      width: 82px; height: 82px; border-radius: 28px;
+      display: grid; place-items: center;
+      margin-bottom: 22px;
+      font-size: 30px; font-weight: 900;
+      color: #3a0902;
+      background: linear-gradient(135deg, #fff0b6, var(--gold));
+      box-shadow: 0 0 0 10px rgba(245,196,107,.09);
+      animation: floatAvatar 4s ease-in-out infinite;
+    }
+    .person:nth-child(2) .avatar { animation-delay: .4s; }
+    .person:nth-child(3) .avatar { animation-delay: .8s; }
+    .person:nth-child(4) .avatar { animation-delay: 1.2s; }
+    .person h3 { margin: 0 0 8px; font-size: 24px; }
+    .person small { color: rgba(255,244,223,.56); }
+    .person:hover { transform: translateY(-5px); transition: .25s ease; }
+
+    .automation { grid-template-columns: repeat(3, 1fr); }
+    .auto-num { color: var(--gold); font-size: 14px; letter-spacing: .14em; }
+
+    .comments-shell {
       display: grid;
-      place-items: center;
-      color: white;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--red-700), var(--gold-500));
-      position: relative;
-      overflow: hidden;
-      animation: avatarBreathe 3.2s ease-in-out infinite;
-    }
-
-    .avatar::after {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,.42), transparent);
-      transform: translateX(-120%);
-      animation: avatarSweep 4.4s ease-in-out infinite;
-    }
-
-    .person strong { display: block; }
-    .person span {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
-    }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      height: 30px;
-      border-radius: 999px;
-      padding: 0 10px;
-      background: rgba(31,122,77,.1);
-      color: var(--green);
-      font-weight: 800;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .module-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: .78fr 1.22fr;
       gap: 18px;
+      align-items: start;
     }
-
-    .module-body {
+    .comment-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .comment-list { display: grid; gap: 12px; }
+    .comment {
       padding: 18px;
-      display: grid;
-      gap: 12px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.11);
     }
-
-    .module-card {
-      padding: 16px;
-      min-height: 124px;
-      border: 1px solid rgba(116,47,35,.1);
-      border-radius: 16px;
-      background: rgba(255,255,255,.72);
-    }
-
-    .module-card strong {
-      display: block;
-      margin-bottom: 9px;
-      font-size: 16px;
-    }
-
-    .module-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .review {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 14px;
-      align-items: center;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .review:last-child { border-bottom: 0; }
-    .review b { display: block; margin-bottom: 5px; }
-    .review span { color: var(--muted); font-size: 12px; }
-
-    .tab-page {
-      display: none;
-      animation: rise .42s ease both;
-    }
-
-    .tab-page.active {
-      display: block;
-    }
-
-    .automation-grid {
-      padding: 18px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .automation-card {
-      position: relative;
-      min-height: 176px;
-      padding: 18px;
-      border: 1px solid rgba(116,47,35,.1);
-      border-radius: 18px;
-      background: rgba(255,255,255,.72);
-      overflow: hidden;
-    }
-
-    .automation-card::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 5px;
-      background: linear-gradient(180deg, var(--red-700), var(--gold-500));
-    }
-
-    .automation-card strong {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-
-    .automation-card p {
-      margin: 0 0 12px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.75;
-    }
-
-    .automation-card code {
-      display: inline-flex;
-      border-radius: 999px;
-      padding: 6px 9px;
-      background: rgba(180,35,24,.09);
-      color: var(--red-800);
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 800;
-    }
+    .comment-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--gold); }
+    .comment-body { color: rgba(255,244,223,.78); white-space: pre-wrap; line-height: 1.7; }
+    .empty { color: rgba(255,244,223,.62); padding: 24px; text-align: center; border: 1px dashed rgba(255,255,255,.22); border-radius: 22px; }
 
     .drawer {
       position: fixed;
-      inset: 0;
-      z-index: 40;
-      display: none;
-      align-items: center;
-      justify-content: flex-end;
-      background: rgba(41, 10, 8, .28);
-      backdrop-filter: blur(10px);
-    }
-
-    .drawer.open {
-      display: flex;
-      animation: fadeIn .18s ease both;
-    }
-
-    .drawer-panel {
-      width: min(520px, calc(100vw - 26px));
-      height: calc(100vh - 26px);
-      margin-right: 13px;
-      border: 1px solid rgba(255,255,255,.75);
-      border-radius: 24px;
+      right: 18px;
+      top: 92px;
+      bottom: 18px;
+      width: min(430px, calc(100% - 36px));
+      z-index: 12;
       padding: 24px;
-      background: rgba(255,255,255,.9);
-      box-shadow: 0 28px 90px rgba(63, 11, 9, .24);
-      overflow: auto;
-      animation: slideIn .28s cubic-bezier(.2,.8,.2,1) both;
+      transform: translateX(calc(100% + 30px));
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+      border-radius: 34px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(18,2,5,.84);
+      backdrop-filter: blur(26px);
+      box-shadow: 0 30px 100px rgba(0,0,0,.42);
     }
-
-    .drawer-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 18px;
-    }
-
-    .drawer-head h3 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    .drawer-head p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .close-btn {
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      font-size: 20px;
-    }
-
-    .detail-stack {
-      display: grid;
-      gap: 12px;
-    }
-
-    .detail-card {
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255,255,255,.72);
-    }
-
-    .detail-card b {
-      display: block;
-      margin-bottom: 8px;
-    }
-
+    .drawer.open { transform: translateX(0); }
+    .drawer-close { float: right; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.12); color: #fff; }
     .toast {
       position: fixed;
-      right: 22px;
-      bottom: 22px;
-      z-index: 60;
-      max-width: 360px;
-      padding: 14px 16px;
-      border: 1px solid rgba(255,255,255,.74);
-      border-radius: 16px;
-      color: white;
-      background: linear-gradient(135deg, var(--red-700), var(--red-950));
-      box-shadow: 0 18px 46px rgba(63,11,9,.24);
-      transform: translateY(30px);
+      left: 50%;
+      bottom: 26px;
+      z-index: 30;
+      transform: translate(-50%, 120px);
       opacity: 0;
-      pointer-events: none;
-      transition: opacity .24s ease, transform .24s ease;
+      padding: 14px 18px;
+      border-radius: 999px;
+      color: #2a0701;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), #fff0b6);
+      transition: .3s ease;
     }
+    .toast.show { transform: translate(-50%, 0); opacity: 1; }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
+    @keyframes spinBadge { from { transform: rotateY(0) scale(.72); opacity: .1; } to { transform: rotateY(720deg) scale(1); opacity: 1; } }
+    @keyframes introOut { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+    @keyframes loadLine { from { width: 0; } to { width: 100%; } }
+    @keyframes slowRotate { to { transform: rotate(360deg); } }
+    @keyframes pulseRing { 50% { transform: scale(1.06); opacity: .55; } }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+    @keyframes floatAvatar { 50% { transform: translateY(-10px) rotate(-2deg); } }
+
+    @media (max-width: 920px) {
+      .nav { align-items: flex-start; border-radius: 26px; }
+      .nav-links { display: none; }
+      .hero-content, .feature-grid, .comments-shell { grid-template-columns: 1fr; }
+      .hero, .hero-content { min-height: auto; }
+      .metrics, .people, .automation { grid-template-columns: repeat(2, 1fr); }
     }
-
-    @keyframes cinematicMove {
-      from { transform: scale(1.05) translate3d(-1%, -1%, 0); }
-      to { transform: scale(1.13) translate3d(1%, 1%, 0); }
-    }
-
-    @keyframes scan {
-      from { transform: translateX(-28%); opacity: .42; }
-      50% { opacity: .74; }
-      to { transform: translateX(28%); opacity: .42; }
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(16px) scale(.99); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @keyframes emblemSpin {
-      0% { transform: rotateY(0deg) rotateZ(0deg) scale(.92); }
-      45% { transform: rotateY(180deg) rotateZ(8deg) scale(1.02); }
-      100% { transform: rotateY(360deg) rotateZ(0deg) scale(.92); }
-    }
-
-    @keyframes emblemFloat {
-      0%, 100% { transform: translate3d(0, 0, 0); }
-      50% { transform: translate3d(-12px, 18px, 0); }
-    }
-
-    @keyframes ringPulse {
-      0%, 100% { transform: scale(.95); opacity: .45; }
-      50% { transform: scale(1.08); opacity: .9; }
-    }
-
-    @keyframes introLoad {
-      from { transform: scaleX(0); }
-      to { transform: scaleX(1); }
-    }
-
-    @keyframes avatarBreathe {
-      0%, 100% { box-shadow: 0 0 0 rgba(180,35,24,0); }
-      50% { box-shadow: 0 0 0 6px rgba(180,35,24,.08); }
-    }
-
-    @keyframes avatarSweep {
-      0%, 62% { transform: translateX(-120%); }
-      100% { transform: translateX(120%); }
-    }
-
-    @keyframes tabPulse {
-      from { transform: scale(1); }
-      50% { transform: scale(1.06); }
-      to { transform: scale(1); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(30px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    @media (max-width: 1180px) {
-      .top-dock, .hero, .content, .system-strip { width: calc(100vw - 28px); }
-      .top-dock { grid-template-columns: 1fr; border-radius: 24px; }
-      .dock-tabs, .dock-actions { justify-content: flex-start; flex-wrap: wrap; }
-      .hero-inner, .main-grid, .module-grid { grid-template-columns: 1fr; }
-      .hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .system-strip, .automation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-
-    @media (max-width: 720px) {
-      .shell { padding: 14px; }
-      .hero { padding: 24px; min-height: 560px; }
-      .hero-metrics { grid-template-columns: 1fr; }
-      .task { grid-template-columns: 1fr; }
-      .person { grid-template-columns: 46px 1fr; }
-      .person .status { grid-column: 2; justify-self: start; }
-      .intro-content { padding: 28px; }
-      .party-emblem { opacity: .26; right: -16%; top: 6%; width: 360px; }
-      .system-strip, .automation-grid { grid-template-columns: 1fr; }
+    @media (max-width: 620px) {
+      .metrics, .people, .automation { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .showreel { min-height: 360px; }
     }
   </style>
 </head>
 <body>
-  <div class="intro" id="intro">
-    <div class="intro-video" aria-hidden="true"></div>
-    <div class="party-emblem" aria-hidden="true">
-      <div class="emblem-ring"></div>
-      <svg viewBox="0 0 240 240" role="img" aria-label="党徽旋转动画">
-        <defs>
-          <linearGradient id="emblemGold" x1="0" y1="0" x2="1" y2="1">
-            <stop stop-color="#fff1a8"/>
-            <stop offset=".42" stop-color="#f4c766"/>
-            <stop offset="1" stop-color="#b97918"/>
-          </linearGradient>
-        </defs>
-        <circle cx="120" cy="120" r="104" fill="rgba(111,22,16,.36)" stroke="url(#emblemGold)" stroke-width="7"/>
-        <path d="M70 138c38-18 68-42 94-76l22 18c-30 42-64 70-108 90l-8-32Z" fill="url(#emblemGold)"/>
-        <path d="M77 69c20-17 51-15 69 3l-17 17c-10-8-25-8-35 0L77 69Z" fill="url(#emblemGold)"/>
-        <path d="M87 82l22-22 67 67-22 22L87 82Z" fill="url(#emblemGold)"/>
-        <path d="M65 164h106c10 0 18 8 18 18v2H47v-2c0-10 8-18 18-18Z" fill="url(#emblemGold)"/>
-        <path d="M60 184h130v16H60z" fill="url(#emblemGold)"/>
-      </svg>
-    </div>
-    <div class="intro-content">
-      <div class="intro-kicker">STATE-OWNED ENTERPRISE PARTY-MASS OFFICE</div>
-      <h1>党建引领<br />宣传赋能</h1>
-      <p>以高质量党建引领高质量发展，以现代传播体系凝聚奋进力量。这里是党群宣传部每日协同、任务推进、内容审核与品牌策划的内部工作中枢。</p>
-      <div class="intro-actions">
-        <button class="enter" id="enterBtn">进入工作台</button>
-        <button id="replayBtn">观看开场</button>
-      </div>
-      <div class="intro-progress"><span></span></div>
+  <div class="intro" aria-hidden="true">
+    <div class="intro-core">
+      <div class="emblem">党</div>
+      <h2>党建引领 聚力攻坚</h2>
+      <p>PARTY MASS WORKBENCH</p>
+      <div class="intro-line"><span></span></div>
     </div>
   </div>
 
-  <div class="shell">
-    <header class="top-dock">
-      <div class="identity">
-        <div class="mark">党</div>
-        <div>
-          <strong>党群宣传部智能工作台</strong>
-          <span id="todayText">内部协同系统</span>
-        </div>
-      </div>
-      <nav class="dock-tabs" aria-label="工作台导航">
-        <button class="dock-tab active" data-tab="overview">总览</button>
-        <button class="dock-tab" data-tab="party">党建</button>
-        <button class="dock-tab" data-tab="media">宣传</button>
-        <button class="dock-tab" data-tab="review">审稿</button>
-        <button class="dock-tab" data-tab="automation">自动化</button>
-      </nav>
-      <div class="dock-actions">
-        <select id="moduleFilter" aria-label="筛选模块">
-          <option value="all">全部模块</option>
-          <option value="党建">党建</option>
-          <option value="宣传">宣传</option>
-        </select>
-        <select id="ownerFilter" aria-label="筛选责任人">
-          <option value="all">全部人员</option>
-        </select>
-        <button id="showIntroBtn">开场</button>
-        <button class="primary" id="addBtn">新增任务</button>
-      </div>
-    </header>
+  <nav class="nav">
+    <a class="brand" href="#top"><span class="brand-mark">党</span><span>党群宣传部智能工作台</span></a>
+    <div class="nav-links">
+      <a href="#dashboard">总览</a>
+      <a href="#modules">双线作战</a>
+      <a href="#people">人员</a>
+      <a href="#automation">自动化</a>
+      <a href="#comments">沟通区</a>
+    </div>
+    <a class="share" href="https://lewisanthonyywwcr9709-commits.github.io/party-mass-workbench/?v=20260802-3" target="_blank" rel="noreferrer">分享页面</a>
+  </nav>
 
-    <section class="hero">
-      <div class="hero-inner">
-        <div class="hero-copy">
-          <div class="eyebrow">党建统筹 · 宣传协同 · 日清日结</div>
-          <h2>让每一项工作<br />都看得见进度</h2>
-          <p>围绕党建和宣传两条主线，沉淀每日安排、责任分工、审稿状态、专题策划和传播任务，形成适合部门内部使用的高端协同门户。</p>
+  <header id="top" class="hero">
+    <div class="hero-content">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> 红色内容品牌 × 部门协同中枢</div>
+        <h1>让党建有力度<br />让宣传有声量</h1>
+        <p>参考高端内容品牌官网的强首屏、沉浸动效和卡片化叙事方式，打造适合国企党群宣传部内部使用的每日工作台：任务推进、人员安排、自动反馈、共享沟通，一屏统筹。</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#dashboard">进入今日战情</a>
+          <a class="btn" href="#comments">部门沟通区</a>
+          <button class="btn" id="copyLink">复制分享链接</button>
         </div>
-        <div class="hero-metrics">
-          <div class="hero-card"><span>今日任务</span><strong id="metricTotal">0</strong><small>晨会后实时更新</small></div>
-          <div class="hero-card"><span>平均进度</span><strong id="metricProgress">0%</strong><small>按任务进度计算</small></div>
-          <div class="hero-card"><span>待审稿件</span><strong id="metricReview">0</strong><small>三审三校闭环</small></div>
-          <div class="hero-card"><span>重点事项</span><strong id="metricImportant">0</strong><small>领导关注事项</small></div>
+      </div>
+      <div class="showreel" aria-label="党政视觉动效">
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <div class="play-card">
+          <strong>今日重点：专题策划 / 审稿发布 / 党务闭环</strong>
+          <span>自动识别超时、终审、发布、归档节点，并在工作台反馈提醒。</span>
         </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>党委会材料 10:30 收口</span><span>视频号脚本 14:00 初审</span><span>意识形态周报 16:20 归档</span><span>公众号推文 17:30 发布复核</span>
+      <span>党委会材料 10:30 收口</span><span>视频号脚本 14:00 初审</span><span>意识形态周报 16:20 归档</span><span>公众号推文 17:30 发布复核</span>
+    </div>
+  </div>
+
+  <main>
+    <section id="dashboard">
+      <div class="section-head">
+        <div><h2>今日战情总览</h2><p>把部门每日安排做成可视化驾驶舱，领导看重点，员工看动作，协作看状态。</p></div>
+        <button class="btn primary" id="completeOne">模拟完成一项</button>
+      </div>
+      <div class="grid metrics" id="metrics"></div>
+    </section>
+
+    <section id="modules">
+      <div class="section-head">
+        <div><h2>党建 × 宣传 双线作战</h2><p>党建负责政治方向、组织体系和基础党务；宣传负责内容生产、矩阵发布和品牌传播。</p></div>
+      </div>
+      <div class="grid feature-grid">
+        <article class="card cinema-card">
+          <div>
+            <div class="eyebrow"><span class="dot"></span> PARTY AFFAIRS</div>
+            <h3>党建工作舱</h3>
+            <p>覆盖党委会、理论学习、统战、团青、意识形态、支部主题党日、材料归档等任务。</p>
+            <div class="chips"><span class="chip">党委材料</span><span class="chip">统战台账</span><span class="chip">意识形态</span><span class="chip">支部工作</span></div>
+          </div>
+          <div class="task-list" id="partyTasks"></div>
+        </article>
+        <article class="card cinema-card">
+          <div>
+            <div class="eyebrow"><span class="dot"></span> MEDIA MATRIX</div>
+            <h3>宣传内容舱</h3>
+            <p>公众号、视频号、专题片、人物稿、项目快讯、审稿发布形成闭环。</p>
+            <div class="chips"><span class="chip">公众号</span><span class="chip">视频号</span><span class="chip">专题策划</span><span class="chip">品牌传播</span></div>
+          </div>
+          <div class="task-list" id="mediaTasks"></div>
+        </article>
       </div>
     </section>
 
-    <div class="system-strip">
-      <div class="system-chip"><b>自动触发</b><span>临近截止、进度停滞、审稿退回、重点事项新增时提醒。</span></div>
-      <div class="system-chip"><b>自动反馈</b><span>完成 100%、延期、待复核、领导关注事项变更时生成反馈。</span></div>
-      <div class="system-chip"><b>人员画像</b><span>点击员工卡片查看当日任务、负荷、风险和建议动作。</span></div>
-      <div class="system-chip"><b>苹果式体验</b><span>入场动效、毛玻璃、抽屉详情、顺滑切换和状态提示。</span></div>
-    </div>
-
-    <main class="content">
-      <div class="tab-page active" id="tab-overview">
-        <div class="main-grid">
-          <section class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>每日工作安排</h3>
-                <p>像任务中控台一样推进每位员工当天事项</p>
-              </div>
-              <span class="pill" id="taskCount">0 项</span>
-            </div>
-            <div class="tasks" id="taskList"></div>
-          </section>
-
-          <div class="side-stack">
-            <section class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>人员状态</h3>
-                  <p>责任分工、任务负荷、完成进度</p>
-                </div>
-                <span class="pill">日清</span>
-              </div>
-              <div class="people" id="peopleList"></div>
-            </section>
-
-            <section class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>今日提示</h3>
-                  <p>部门内部事项提醒</p>
-                </div>
-                <span class="pill">提醒</span>
-              </div>
-              <div class="module-body">
-                <div class="module-card"><strong>晨会关注</strong><p>先确认领导关注事项，再确认公众号、视频号和重要材料的出稿节奏。</p></div>
-                <div class="module-card"><strong>收口原则</strong><p>涉及政治表述、单位名称、数据口径和图片使用的内容必须完成复核。</p></div>
-              </div>
-            </section>
-          </div>
-        </div>
+    <section id="people">
+      <div class="section-head">
+        <div><h2>人员工作安排</h2><p>点击员工卡片查看今日重点、负责模块和推进建议，头像带轻动效，更像内容团队的工作台。</p></div>
       </div>
+      <div class="grid people" id="peopleGrid"></div>
+    </section>
 
-      <div class="tab-page" id="tab-party">
-        <div class="module-grid">
-          <section class="panel">
-            <div class="panel-head"><div><h3>党建模块</h3><p>党务、统战、团青、意识形态、理论学习</p></div><span class="pill">主责主业</span></div>
-            <div class="module-body">
-              <div class="module-card"><strong>党务基础</strong><p>党委会、支部组织生活、主题党日、换届、发展党员、党费和台账归档。</p></div>
-              <div class="module-card"><strong>统战群团</strong><p>统战对象联系、团青工作、工会宣传、志愿服务、节日慰问和活动策划。</p></div>
-              <div class="module-card"><strong>理论武装</strong><p>第一议题、中心组学习、专题研讨、学习资料、心得成果和宣讲安排。</p></div>
-              <div class="module-card"><strong>意识形态</strong><p>阵地管理、舆情风险提示、内容审核、季度分析和责任制落实。</p></div>
-            </div>
-          </section>
-          <section class="panel">
-            <div class="panel-head"><div><h3>党建今日事项</h3><p>仅展示党建模块任务</p></div><span class="pill">党建</span></div>
-            <div class="tasks" id="partyTasks"></div>
-          </section>
-        </div>
+    <section id="automation">
+      <div class="section-head">
+        <div><h2>自动化触发规则</h2><p>明确什么时候触发、什么时候反馈，让日清日结不靠拍脑袋。</p></div>
       </div>
-
-      <div class="tab-page" id="tab-media">
-        <div class="module-grid">
-          <section class="panel">
-            <div class="panel-head"><div><h3>宣传模块</h3><p>公众号、视频号、新闻稿、专题策划、品牌素材</p></div><span class="pill">传播矩阵</span></div>
-            <div class="module-body">
-              <div class="module-card"><strong>公众号</strong><p>选题策划、标题优化、图文编辑、图片规范、发布排期和数据复盘。</p></div>
-              <div class="module-card"><strong>视频号</strong><p>脚本、分镜、素材筛选、字幕包装、封面标题和发布节奏。</p></div>
-              <div class="module-card"><strong>新闻宣传</strong><p>基层投稿、项目动态、重要活动、先进典型和媒体通稿。</p></div>
-              <div class="module-card"><strong>品牌专题</strong><p>党建品牌、项目攻坚、一线人物、企业文化和主题宣传月。</p></div>
-            </div>
-          </section>
-          <section class="panel">
-            <div class="panel-head"><div><h3>宣传今日事项</h3><p>仅展示宣传模块任务</p></div><span class="pill">宣传</span></div>
-            <div class="tasks" id="mediaTasks"></div>
-          </section>
-        </div>
+      <div class="grid automation">
+        <article class="card"><span class="auto-num">01 / TRIGGER</span><h3>任务到点前 30 分钟</h3><p>自动提示责任人检查材料、素材、发布口径和审稿状态。</p></article>
+        <article class="card"><span class="auto-num">02 / FEEDBACK</span><h3>进度达到 100%</h3><p>弹出完成反馈，并建议归档到党建或宣传对应台账。</p></article>
+        <article class="card"><span class="auto-num">03 / RISK</span><h3>超过截止时间未完成</h3><p>标记为风险事项，提醒部门负责人协调资源或调整优先级。</p></article>
       </div>
+    </section>
 
-      <div class="tab-page" id="tab-review">
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <h3>审稿流转与三审三校</h3>
-              <p>适合后续扩展成真实流转：起草、初审、复审、终审、发布</p>
-            </div>
-            <span class="pill">质量把关</span>
-          </div>
-          <div class="module-body">
-            <div class="review"><div><b>公众号推文：项目攻坚专题</b><span>二审中 · 需核对单位名称和项目数据</span></div><span class="status">待复核</span></div>
-            <div class="review"><div><b>视频号脚本：一线建设者人物短片</b><span>素材整理 · 待补采访金句</span></div><span class="status">推进中</span></div>
-            <div class="review"><div><b>新闻稿件：基层单位投稿</b><span>政治表述校核 · 标题需降虚火</span></div><span class="status">待修改</span></div>
-            <div class="review"><div><b>意识形态周报</b><span>终审前 · 风险提示需补来源</span></div><span class="status">收口中</span></div>
-          </div>
-        </section>
+    <section id="comments">
+      <div class="section-head">
+        <div><h2>部门沟通区</h2><p>这里接入 GitHub Issue 评论，别人打开公开网页也能看到同一份留言；发言需要登录 GitHub。</p></div>
       </div>
-
-      <div class="tab-page" id="tab-automation">
-        <section class="panel">
-          <div class="panel-head">
-            <div>
-              <h3>自动化触发与反馈规则</h3>
-              <p>先作为部门规则说明，后续可接入真实消息提醒、日报和待办系统</p>
-            </div>
-            <span class="pill">Automation</span>
-          </div>
-          <div class="automation-grid">
-            <div class="automation-card">
-              <strong>什么时候触发</strong>
-              <p>新增重点任务、任务截止前 2 小时、进度 4 小时未更新、审稿退回、领导临时交办、舆情风险出现。</p>
-              <code>触发：任务状态变化</code>
-            </div>
-            <div class="automation-card">
-              <strong>什么时候反馈</strong>
-              <p>任务完成到 100%、超过截止时间、审稿进入终审、宣传内容发布、党建材料完成归档。</p>
-              <code>反馈：完成 / 延期 / 风险</code>
-            </div>
-            <div class="automation-card">
-              <strong>反馈给谁</strong>
-              <p>责任人收到执行提醒，模块负责人收到进度汇总，部门负责人收到重点事项和延期风险。</p>
-              <code>对象：责任链条</code>
-            </div>
-            <div class="automation-card">
-              <strong>反馈什么</strong>
-              <p>任务名称、责任人、当前进度、卡点说明、下一步动作、是否需要协调资源。</p>
-              <code>内容：可行动信息</code>
-            </div>
-            <div class="automation-card">
-              <strong>每日节奏</strong>
-              <p>09:00 自动生成今日清单，15:00 推送半日进度，18:00 汇总完成情况和明日遗留。</p>
-              <code>节奏：早派发 晚闭环</code>
-            </div>
-            <div class="automation-card">
-              <strong>质量红线</strong>
-              <p>政治表述、单位名称、数字口径、图片授权、意识形态风险，一旦标记即进入强制复核。</p>
-              <code>红线：强制审稿</code>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-  </div>
-
-  <div class="drawer" id="personDrawer" aria-hidden="true">
-    <div class="drawer-panel">
-      <div class="drawer-head">
-        <div>
-          <h3 id="drawerName">员工详情</h3>
-          <p id="drawerRole">查看今日工作、进度和系统建议。</p>
-        </div>
-        <button class="close-btn" id="closeDrawer" aria-label="关闭">×</button>
-      </div>
-      <div class="detail-stack" id="drawerContent"></div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast">系统反馈</div>
-
-  <script>
-    const defaultTasks = [
-      { title: "党委会材料收口与会前清单核对", module: "党建", owner: "陈主任", deadline: "10:30", priority: "重点", progress: 72 },
-      { title: "统战工作半年台账更新", module: "党建", owner: "林专员", deadline: "11:40", priority: "常规", progress: 45 },
-      { title: "公众号项目攻坚专题推文二审", module: "宣传", owner: "黄编辑", deadline: "15:00", priority: "重点", progress: 60 },
-      { title: "视频号素材筛选与脚本初稿", module: "宣传", owner: "吴策划", deadline: "17:30", priority: "重点", progress: 35 },
-      { title: "意识形态风险提示周报", module: "党建", owner: "陈主任", deadline: "16:20", priority: "重点", progress: 50 },
-      { title: "基层投稿标题优化与图片规范", module: "宣传", owner: "黄编辑", deadline: "18:00", priority: "常规", progress: 82 },
-      { title: "七一专题素材库归档", module: "宣传", owner: "吴策划", deadline: "18:20", priority: "常规", progress: 28 },
-      { title: "支部主题党日活动方案复核", module: "党建", owner: "林专员", deadline: "16:50", priority: "重点", progress: 66 }
-    ];
-
-    const people = [
-      { name: "陈主任", role: "统筹党建材料、重要审核", focus: "把控政治方向和重点材料收口", avatar: "陈" },
-      { name: "林专员", role: "党务台账、统战群团", focus: "维护党务基础工作闭环", avatar: "林" },
-      { name: "黄编辑", role: "公众号、新闻稿、审稿", focus: "保障内容表达和发布质量", avatar: "黄" },
-      { name: "吴策划", role: "视频号、专题策划、素材", focus: "提升影像策划和品牌表达", avatar: "吴" }
-    ];
-
-    const storageKey = "partyMassWorkbenchTasks-v2";
-    let tasks = JSON.parse(localStorage.getItem(storageKey) || "null") || defaultTasks;
-
-    const intro = document.getElementById("intro");
-    const taskList = document.getElementById("taskList");
-    const peopleList = document.getElementById("peopleList");
-    const moduleFilter = document.getElementById("moduleFilter");
-    const ownerFilter = document.getElementById("ownerFilter");
-    const drawer = document.getElementById("personDrawer");
-    const drawerName = document.getElementById("drawerName");
-    const drawerRole = document.getElementById("drawerRole");
-    const drawerContent = document.getElementById("drawerContent");
-    const toast = document.getElementById("toast");
-
-    document.getElementById("todayText").textContent = new Intl.DateTimeFormat("zh-CN", { dateStyle: "full" }).format(new Date());
-
-    function save() {
-      localStorage.setItem(storageKey, JSON.stringify(tasks));
-    }
-
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add("show");
-      window.clearTimeout(showToast.timer);
-      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 3200);
-    }
-
-    function statusText(value) {
-      if (value >= 100) return "已完成";
-      if (value >= 70) return "收口中";
-      if (value >= 35) return "推进中";
-      return "待启动";
-    }
-
-    function renderFilters() {
-      const current = ownerFilter.value;
-      const owners = [...new Set(tasks.map(task => task.owner))];
-      ownerFilter.innerHTML = '<option value="all">全部人员</option>' + owners.map(owner => `<option value="${owner}">${owner}</option>`).join("");
-      if (owners.includes(current)) ownerFilter.value = current;
-    }
-
-    function filteredTasks() {
-      return tasks.filter(task => {
-        const moduleOk = moduleFilter.value === "all" || task.module === moduleFilter.value;
-        const ownerOk = ownerFilter.value === "all" || task.owner === ownerFilter.value;
-        return moduleOk && ownerOk;
-      });
-    }
-
-    function renderMetrics(list) {
-      const avg = list.length ? Math.round(list.reduce((sum, task) => sum + Number(task.progress), 0) / list.length) : 0;
-      document.getElementById("metricTotal").textContent = list.length;
-      document.getElementById("metricProgress").textContent = avg + "%";
-      document.getElementById("metricReview").textContent = tasks.filter(task => task.title.includes("审")).length;
-      document.getElementById("metricImportant").textContent = tasks.filter(task => task.priority === "重点").length;
-      document.getElementById("taskCount").textContent = list.length + " 项";
-    }
-
-    function taskMarkup(task) {
-      const index = tasks.indexOf(task);
-      return `
-        <article class="task">
-          <div>
-            <h4>${task.title}</h4>
-            <div class="task-meta">
-              <span class="tag ${task.module === "党建" ? "party" : "media"}">${task.module}</span>
-              <span class="tag">${task.owner}</span>
-              <span class="tag">截止 ${task.deadline}</span>
-              <span class="tag">${task.priority}</span>
-            </div>
-          </div>
-          <div class="progress-box">
-            <div class="progress-top"><span>${statusText(task.progress)}</span><b>${task.progress}%</b></div>
-            <input type="range" min="0" max="100" value="${task.progress}" data-index="${index}" aria-label="${task.title}进度" />
+      <div class="comments-shell">
+        <article class="card">
+          <div class="eyebrow"><span class="dot"></span> SHARED COMMENTS</div>
+          <h3>用法说明</h3>
+          <p>点击“去留言”会打开 GitHub 评论页。同事留言后，回到本页面点刷新即可同步显示。后续如果要免登录评论，需要接数据库或表单服务。</p>
+          <div class="comment-actions">
+            <button class="btn primary" id="refreshComments">刷新评论</button>
+            <a class="btn" href="https://github.com/lewisanthonyywwcr9709-commits/party-mass-workbench/issues/1" target="_blank" rel="noreferrer">去留言</a>
           </div>
         </article>
-      `;
+        <article class="card">
+          <div id="commentsList" class="comment-list"><div class="empty">正在读取部门留言……</div></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <aside class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose">×</button>
+    <div id="drawerContent"></div>
+  </aside>
+  <div class="toast" id="toast">已完成并触发反馈</div>
+
+  <script>
+    const issueCommentsApi = "https://api.github.com/repos/lewisanthonyywwcr9709-commits/party-mass-workbench/issues/1/comments";
+    const shareUrl = "https://lewisanthonyywwcr9709-commits.github.io/party-mass-workbench/?v=20260802-3";
+    const tasks = [
+      { title: "党委会材料收口与会前清单核对", module: "党建", owner: "陈主任", deadline: "10:30", progress: 72 },
+      { title: "统战工作半年台账更新", module: "党建", owner: "林专员", deadline: "11:40", progress: 45 },
+      { title: "项目攻坚专题推文终审", module: "宣传", owner: "周编辑", deadline: "14:30", progress: 88 },
+      { title: "视频号脚本和分镜确认", module: "宣传", owner: "王策划", deadline: "15:20", progress: 56 },
+      { title: "意识形态风险提示周报", module: "党建", owner: "陈主任", deadline: "16:20", progress: 50 },
+      { title: "公众号发布复核与数据记录", module: "宣传", owner: "周编辑", deadline: "17:30", progress: 64 }
+    ];
+    const people = [
+      { name: "陈主任", avatar: "陈", role: "党建统筹 / 重点审核", focus: "党委材料、政治方向、风险事项收口" },
+      { name: "林专员", avatar: "林", role: "党务统战 / 台账归档", focus: "支部工作、统战台账、学习材料闭环" },
+      { name: "周编辑", avatar: "周", role: "公众号 / 审稿发布", focus: "新闻稿、推文终审、发布复盘" },
+      { name: "王策划", avatar: "王", role: "视频号 / 专题策划", focus: "短视频脚本、专题包装、传播创意" }
+    ];
+
+    const $ = (selector) => document.querySelector(selector);
+    const metrics = $("#metrics");
+    const partyTasks = $("#partyTasks");
+    const mediaTasks = $("#mediaTasks");
+    const peopleGrid = $("#peopleGrid");
+    const toast = $("#toast");
+    const drawer = $("#drawer");
+    const drawerContent = $("#drawerContent");
+    let localTasks = JSON.parse(localStorage.getItem("pmwTasks") || "null") || tasks;
+
+    function saveTasks() { localStorage.setItem("pmwTasks", JSON.stringify(localTasks)); }
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
     }
-
-    function bindRanges(container) {
-      container.querySelectorAll("input[type='range']").forEach(input => {
-        input.addEventListener("input", event => {
-          const task = tasks[event.target.dataset.index];
-          const before = Number(task.progress);
-          task.progress = Number(event.target.value);
-          save();
-          render();
-          if (before < 100 && task.progress >= 100) {
-            showToast(`自动反馈：${task.owner} 已完成「${task.title}」，可进入复核或归档。`);
-          } else if (task.progress >= 80) {
-            showToast(`自动提醒：${task.title} 已进入收口阶段，建议准备反馈材料。`);
-          }
-        });
-      });
+    function taskMarkup(task) {
+      return `<div class="task"><div class="task-top"><strong>${escapeHtml(task.title)}</strong><span>${task.progress}%</span></div><small>${task.owner} · ${task.deadline}</small><div class="bar"><i style="width:${task.progress}%"></i></div></div>`;
     }
-
-    function renderTasks() {
-      const list = filteredTasks();
-      renderMetrics(list);
-      taskList.innerHTML = list.map(taskMarkup).join("");
-      bindRanges(taskList);
-
-      const party = document.getElementById("partyTasks");
-      const media = document.getElementById("mediaTasks");
-      party.innerHTML = tasks.filter(task => task.module === "党建").map(taskMarkup).join("");
-      media.innerHTML = tasks.filter(task => task.module === "宣传").map(taskMarkup).join("");
-      bindRanges(party);
-      bindRanges(media);
-    }
-
-    function renderPeople() {
-      peopleList.innerHTML = people.map(person => {
-        const owned = tasks.filter(task => task.owner === person.name);
-        const avg = owned.length ? Math.round(owned.reduce((sum, task) => sum + Number(task.progress), 0) / owned.length) : 0;
-        return `
-          <div class="person" data-person="${person.name}" role="button" tabindex="0" aria-label="查看${person.name}详情">
-            <div class="avatar">${person.avatar}</div>
-            <div><strong>${person.name}</strong><span>${person.role} · ${owned.length} 项任务</span></div>
-            <div class="status">${avg}%</div>
-          </div>
-        `;
-      }).join("");
-      peopleList.querySelectorAll(".person").forEach(card => {
-        card.addEventListener("click", () => openPerson(card.dataset.person));
-        card.addEventListener("keypress", event => {
-          if (event.key === "Enter") openPerson(card.dataset.person);
-        });
-      });
-    }
-
-    function openPerson(name) {
-      const person = people.find(item => item.name === name);
-      const owned = tasks.filter(task => task.owner === name);
-      const avg = owned.length ? Math.round(owned.reduce((sum, task) => sum + Number(task.progress), 0) / owned.length) : 0;
-      const risks = owned.filter(task => task.priority === "重点" && task.progress < 70);
-      drawerName.textContent = `${person.name} · 今日画像`;
-      drawerRole.textContent = `${person.role}。${person.focus}。`;
-      drawerContent.innerHTML = `
-        <div class="detail-card"><b>综合进度</b><p>${avg}% · ${owned.length} 项任务 · ${risks.length} 项重点风险</p></div>
-        <div class="detail-card"><b>系统建议</b><p>${risks.length ? "优先推动重点事项收口，并在半日节点反馈卡点。" : "当前节奏较稳，可准备完成反馈和素材归档。"}</p></div>
-        ${owned.map(task => `<div class="detail-card"><b>${task.title}</b><p>${task.module} · ${task.priority} · 截止 ${task.deadline} · 当前 ${task.progress}%</p></div>`).join("")}
-      `;
-      drawer.classList.add("open");
-      drawer.setAttribute("aria-hidden", "false");
-    }
-
-    function closeDrawer() {
-      drawer.classList.remove("open");
-      drawer.setAttribute("aria-hidden", "true");
-    }
-
     function render() {
-      renderFilters();
-      renderTasks();
-      renderPeople();
+      const done = localTasks.filter(task => task.progress >= 100).length;
+      const avg = Math.round(localTasks.reduce((sum, task) => sum + task.progress, 0) / localTasks.length);
+      const party = localTasks.filter(task => task.module === "党建").length;
+      const media = localTasks.filter(task => task.module === "宣传").length;
+      metrics.innerHTML = [
+        ["今日任务", localTasks.length, "党建宣传两线事项"],
+        ["平均进度", avg + "%", "按任务完成度计算"],
+        ["党建事项", party, "党务统战与材料归档"],
+        ["宣传事项", media, "公众号视频号与专题传播"]
+      ].map(item => `<article class="card metric"><b>${item[1]}</b><span>${item[0]}</span><p>${item[2]}</p></article>`).join("");
+      partyTasks.innerHTML = localTasks.filter(task => task.module === "党建").map(taskMarkup).join("");
+      mediaTasks.innerHTML = localTasks.filter(task => task.module === "宣传").map(taskMarkup).join("");
+      peopleGrid.innerHTML = people.map((person, index) => `
+        <button class="card person" data-person="${index}">
+          <div class="avatar">${person.avatar}</div>
+          <h3>${person.name}</h3>
+          <small>${person.role}</small>
+          <p>${person.focus}</p>
+        </button>
+      `).join("");
+      document.querySelectorAll("[data-person]").forEach(button => button.addEventListener("click", openPerson));
+    }
+    function openPerson(event) {
+      const person = people[Number(event.currentTarget.dataset.person)];
+      const owned = localTasks.filter(task => task.owner === person.name);
+      drawerContent.innerHTML = `<div class="avatar">${person.avatar}</div><h2>${person.name}</h2><p>${person.role}</p><h3>今日重点</h3>${owned.length ? owned.map(taskMarkup).join("") : "<p>暂无独立任务，可支援重点审稿和发布复核。</p>"}<h3>协作建议</h3><p>优先处理临近截止事项，完成后在部门沟通区同步一句进展，方便负责人快速掌握状态。</p>`;
+      drawer.classList.add("open");
+    }
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+    }
+    function formatDate(value) {
+      return new Intl.DateTimeFormat("zh-CN", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
+    }
+    async function loadComments() {
+      const box = $("#commentsList");
+      box.innerHTML = `<div class="empty">正在读取部门留言……</div>`;
+      try {
+        const response = await fetch(issueCommentsApi, { headers: { "Accept": "application/vnd.github+json" } });
+        if (!response.ok) throw new Error("GitHub API " + response.status);
+        const comments = await response.json();
+        if (!comments.length) {
+          box.innerHTML = `<div class="empty">还没有留言。点击“去留言”发起第一条部门沟通。</div>`;
+          return;
+        }
+        box.innerHTML = comments.slice(-12).reverse().map(comment => `
+          <div class="comment">
+            <div class="comment-head"><strong>${escapeHtml(comment.user.login)}</strong><span>${formatDate(comment.created_at)}</span></div>
+            <div class="comment-body">${escapeHtml(comment.body)}</div>
+          </div>
+        `).join("");
+      } catch (error) {
+        box.innerHTML = `<div class="empty">评论暂时读取失败，可直接点击“去留言”查看 GitHub 沟通区。</div>`;
+      }
     }
 
-    document.getElementById("enterBtn").addEventListener("click", () => {
-      intro.classList.add("hidden");
-      showToast("自动反馈：已进入今日工作台，系统开始监听任务进度。");
-    });
-    document.getElementById("replayBtn").addEventListener("click", () => {
-      intro.classList.remove("hidden");
-      window.setTimeout(() => intro.classList.add("hidden"), 5200);
-    });
-    document.getElementById("showIntroBtn").addEventListener("click", () => intro.classList.remove("hidden"));
-    document.getElementById("closeDrawer").addEventListener("click", closeDrawer);
-    drawer.addEventListener("click", event => {
-      if (event.target === drawer) closeDrawer();
-    });
-
-    document.getElementById("addBtn").addEventListener("click", () => {
-      const title = prompt("输入新任务名称");
-      if (!title) return;
-      const module = moduleFilter.value === "宣传" ? "宣传" : "党建";
-      tasks.unshift({ title, module, owner: module === "宣传" ? "黄编辑" : "陈主任", deadline: "18:00", priority: "常规", progress: 0 });
-      save();
+    $("#completeOne").addEventListener("click", () => {
+      const target = localTasks.find(task => task.progress < 100);
+      if (!target) return showToast("今日任务已全部完成");
+      target.progress = Math.min(100, target.progress + 18);
+      if (target.progress >= 100) showToast(`${target.title} 已完成并触发归档反馈`);
+      else showToast(`${target.title} 进度已更新到 ${target.progress}%`);
+      saveTasks();
       render();
     });
-
-    moduleFilter.addEventListener("change", renderTasks);
-    ownerFilter.addEventListener("change", renderTasks);
-
-    document.querySelectorAll(".dock-tab").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".dock-tab").forEach(item => item.classList.remove("active"));
-        document.querySelectorAll(".tab-page").forEach(page => page.classList.remove("active"));
-        button.classList.add("active");
-        button.classList.add("pulse");
-        window.setTimeout(() => button.classList.remove("pulse"), 900);
-        document.getElementById("tab-" + button.dataset.tab).classList.add("active");
-        if (button.dataset.tab === "automation") showToast("自动化规则已打开：可查看触发条件和反馈对象。");
-      });
+    $("#copyLink").addEventListener("click", async () => {
+      await navigator.clipboard.writeText(shareUrl);
+      showToast("分享链接已复制");
     });
+    $("#refreshComments").addEventListener("click", loadComments);
+    $("#drawerClose").addEventListener("click", () => drawer.classList.remove("open"));
 
-    window.setTimeout(() => {
-      intro.classList.add("hidden");
-      showToast("自动反馈：片头播放完成，已进入工作台。");
-    }, 5600);
     render();
+    loadComments();
   </script>
 </body>
 </html>
